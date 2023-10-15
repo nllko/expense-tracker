@@ -1,14 +1,15 @@
 <template>
-  <NavigationBar/>
+  <SideBar/>
+  <RouterView/>
 </template>
 
 <script>
-import NavigationBar from './components/NavigationBar.vue'
+import SideBar from './components/SideBar.vue'
 
 export default {
   name: 'App',
   components: {
-    NavigationBar
+    SideBar
   }
 }
 </script>
