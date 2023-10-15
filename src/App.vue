@@ -1,10 +1,12 @@
 <template>
-  <SideBar/>
-  <RouterView/>
+  <div class="flex">
+    <SideBar />
+    <RouterView />
+  </div>
 </template>
 
 <script>
-import SideBar from './components/SideBar.vue'
+import SideBar from './components/SideBar/SideBar.vue'
 
 export default {
   name: 'App',

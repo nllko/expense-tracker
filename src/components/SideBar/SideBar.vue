@@ -1,5 +1,5 @@
 <template>
-    <div class="w-64 h-screen bg-zinc-900 rounded-md">
+    <div class="w-64 h-screen bg-zinc-900 rounded-r-md flex flex-col">
         <div class="px-6 pt-8">
             <div class="flex items-center justify-between">
                 <RouterLink to="/">
@@ -25,7 +25,8 @@
             </ul>
         </div>
 
-        <div class="px-6 pt-8">
+        <div class="mt-auto pb-4">
+            <div class="px-6 pt-8">
             <hr class="border-zinc-700" />
         </div>
 
@@ -33,6 +34,7 @@
             <ul class="flex flex-col space-y-2 pl-0.5">
                 <SideBarItem to="/settings" icon="gear" name="Settings" />
             </ul>
+        </div>
         </div>
     </div>
 </template>
