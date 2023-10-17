@@ -10,22 +10,22 @@ const routes = [
     {
         path: '/budget',
         name: 'Budget',
-        component: () => import('../views/BudgetPage.vue')
+        component: () => import('../views/BudgetView.vue')
     },
     {
         path: '/planner',
         name: 'Planner',
-        component: () => import('../views/PlannerPage.vue')
+        component: () => import('../views/PlannerView.vue')
     },
     {
         path: '/debts',
         name: 'Debts',
-        component: () => import('../views/DebtsPage.vue')
+        component: () => import('../views/DebtsView.vue')
     },
     {
         path: '/settings',
         name: 'Settings',
-        component: () => import('../views/SettingsPage.vue')
+        component: () => import('../views/SettingsView.vue')
     }
 ]
 
