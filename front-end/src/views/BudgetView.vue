@@ -1,5 +1,5 @@
 <script>
-import BudgetBalance from '../components/Budget/BudgetBalanceComponent.vue';
+import BudgetBalance from '../components/Budget/BudgetBalance/BudgetBalanceComponent.vue';
 export default {
     components: {
         BudgetBalance

@@ -1,14 +1,19 @@
 <script>
 import Card from 'primevue/card';
+import Dialog from 'primevue/dialog';
+import AddTransactionForm from './AddTransaction/AddTransactionForm.vue'
 
 export default {
     data() {
         return {
-            balance: 123.45
+            balance: 123.45,
+            visible: true,
         }
     },
     components: {
-        Card
+        Card,
+        Dialog,
+        AddTransactionForm
     }
 }
 </script>
@@ -21,9 +26,17 @@ export default {
                     <fa icon="angles-right" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
             </div>
-            <div class="flex items-center" :class="balance > 0 ? 'text-green-200' : 'text-red-200'">
-                <fa icon="fa-eur" />
-                <span class="pl-4">{{ balance }}</span>
+            <div class="flex items-center justify-between" :class="balance > 0 ? 'text-green-200' : 'text-red-200'">
+                <div>
+                    <fa icon="fa-eur" />
+                    <span class="pl-4">{{ balance }}</span>
+                </div>
+                <button class="flex items-center justify-center" @click="visible = true">
+                    <fa icon="fa-plus" class="text-green-500 hover:text-green-300 p-2" />
+                </button>
+                <Dialog v-model:visible="visible" modal header="Transaction" :style="{ width: '35vw' }">
+                    <AddTransactionForm />
+                </Dialog>
             </div>
         </template>
         <template #content>
