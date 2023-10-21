@@ -8,6 +8,7 @@ import PrimeVue from 'primevue/config';
 
 import './assets/tailwind.css'
 import './assets/theme.css';
+import 'primeicons/primeicons.css'
 
 library.add(fas)
 

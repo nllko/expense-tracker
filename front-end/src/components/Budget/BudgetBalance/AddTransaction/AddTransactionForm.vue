@@ -5,6 +5,8 @@ import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import RadioButton from 'primevue/radiobutton';
 import Textarea from 'primevue/textarea';
+import Button from 'primevue/button';
+import BudgetService from '@/services/BudgetService'
 
 export default {
     data() {
@@ -22,7 +24,20 @@ export default {
         Dropdown,
         RadioButton,
         InputNumber,
-        Textarea
+        Textarea,
+        Button
+    },
+    methods: {
+        async saveTransaction () {
+            const response = await BudgetService.saveTransaction({
+                title: this.title,
+                value: this.value,
+                date: this.date,
+                category: this.category,
+                notes: this.notes
+            })
+            console.log(response.data)
+        }
     }
 }
 </script>
@@ -62,5 +77,8 @@ export default {
     <div class="flex flex-col">
         <label>Notes</label>
         <Textarea v-model="notes" />
+    </div>
+    <div class="flex justify-end pt-4">
+        <Button icon="pi pi-check" label="Save" @click="saveTransaction()" />
     </div>
 </template>
