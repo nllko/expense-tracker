@@ -13,9 +13,10 @@ export default {
         return {
             title: null,
             value: null,
-            date: null,
+            date: new Date,
             category: null,
-            notes: null
+            notes: null,
+            type: 'income'
         }
     },
     components: {
@@ -28,15 +29,26 @@ export default {
         Button
     },
     methods: {
-        async saveTransaction () {
-            const response = await BudgetService.saveTransaction({
+        async saveIncome(data) {
+            await BudgetService.saveIncome(data)
+        },
+        async saveExpense(data) {
+            await BudgetService.saveExpense(data)
+        },
+        async saveTransaction() {
+            const data = {
                 title: this.title,
                 value: this.value,
                 date: this.date,
                 category: this.category,
                 notes: this.notes
-            })
-            console.log(response.data)
+            }
+
+            if (this.type === 'income') {
+                this.saveIncome(data);
+            } else {
+                this.saveExpense(data);
+            }
         }
     }
 }
@@ -55,11 +67,11 @@ export default {
                 <InputNumber v-model="value" :maxFractionDigits="2" mode="currency" currency="EUR" locale="de-DE" />
                 <div class="flex flex-col pl-4 justify-between">
                     <div class="flex items-center">
-                        <RadioButton />
+                        <RadioButton v-model="type" value="expense" />
                         <label>Expense</label>
                     </div>
                     <div class="flex items-center">
-                        <RadioButton />
+                        <RadioButton v-model="type" value="income" />
                         <label>Income</label>
                     </div>
                 </div>
@@ -67,7 +79,7 @@ export default {
         </div>
         <div class="flex flex-col">
             <label>Date</label>
-            <Calendar v-model="date" />
+            <Calendar v-model="date" dateFormat="dd/mm/yy" showIcon/>
         </div>
     </div>
     <div class="flex flex-col">

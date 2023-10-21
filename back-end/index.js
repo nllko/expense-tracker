@@ -15,11 +15,10 @@ app.get('/status', (req, res) => {
     })
 })
 
-app.post('/saveTransaction', (req, res) => {
-    res.send({
-        message: 'transaction saved!',
-        data: req.body
-    })
-})
+const budget = require('./src/routes/api/budget');
 
-app.listen(process.env.PORT || 8081)
+app.use('/budget', budget);
+
+const port = process.env.PORT || 8081;
+
+app.listen(port, () => console.log(`Server is running on port ${port}`))
