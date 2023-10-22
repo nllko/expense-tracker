@@ -2,12 +2,13 @@
 export default {
     props: {
         transactions: Array,
+        label: String
     }
 }
 </script>
 
 <template>
-    <span>Latest Transactions :</span>
+    <span>{{ label }}</span>
     <ul class="flex flex-col space-y-2">
         <li v-for="transaction in transactions" :key="transaction._id" class="flex items-center"
             :class="transaction.type === 'expense' ? 'text-red-200' : 'text-green-200'">

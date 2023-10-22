@@ -6,5 +6,11 @@ export default {
     },
     getLatestTransactions () {
         return api().get('budget/transactions/latest');
+    },
+    getLatestExpenses () {
+        return api().get('budget/transactions/latestExpenses');
+    },
+    getLatestIncomes () {
+        return api().get('budget/transactions/latestIncomes');
     }
 }

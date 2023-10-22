@@ -3,51 +3,95 @@ import Card from 'primevue/card';
 import Dialog from 'primevue/dialog';
 import AddTransactionForm from './AddTransaction/AddTransactionForm.vue'
 import BudgetService from '@/services/BudgetService';
-import LatesTransactionList from './LatestTransactions/LatestTransactionsList.vue'
+import BudgetBalanceCard from './BudgetBalanceCard.vue';
 
 export default {
     data() {
         return {
-            balance: 123.45,
-            visible: true,
-            latestTransactions: null
+            balance: 111.11,
+            expenses: -333.33,
+            incomes: 444.44,
+            visible: false,
+            expanded: false,
+            latestTransactions: null,
+            latestExpenses: null,
+            latestIncomes: null
         }
     },
     components: {
         Card,
         Dialog,
         AddTransactionForm,
-        LatesTransactionList
+        BudgetBalanceCard
+    },
+    methods: {
+        toggleBalanceExpansion() {
+            this.expanded = !this.expanded;
+        }
     },
     async mounted() {
         this.latestTransactions = (await BudgetService.getLatestTransactions()).data;
+        this.latestExpenses = (await BudgetService.getLatestExpenses()).data;
+        this.latestIncomes = (await BudgetService.getLatestIncomes()).data;
     }
 }
 </script>
 <template>
-    <Card class="w-64">
-        <template #title>
-            <div class="flex items-center justify-between">
-                <span>Balance</span>
-                <button class="flex items-center justify-center">
-                    <fa icon="angles-right" class="text-green-500 hover:text-green-300 p-2" />
+    <div class="flex">
+        <BudgetBalanceCard class="balance-card" title="Balance" subTitle="Latest Transactions : " :value="balance"
+            :latestTransactions="latestTransactions" />
+        <BudgetBalanceCard class="pl-4" v-if="expanded" title="Expenses" subTitle="Latest Expenses : " :value="expenses"
+            :latestTransactions="latestExpenses" />
+        <BudgetBalanceCard class="pl-4" v-if="expanded" title="Incomes" subTitle="Latest Incomes : " :value="incomes"
+            :latestTransactions="latestIncomes" />
+        <Card class="button-container-card">
+            <template #title>
+                <button class="flex items-center justify-center"
+                    :class="{ 'button-animation-right': !expanded, 'button-animation-left': expanded }"
+                    @click="toggleBalanceExpansion">
+                    <fa :icon="expanded ? 'angles-left' : 'angles-right'" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
-            </div>
-            <div class="flex items-center justify-between" :class="balance > 0 ? 'text-green-200' : 'text-red-200'">
-                <div>
-                    <fa icon="fa-eur" />
-                    <span class="pl-4">{{ balance }}</span>
-                </div>
                 <button class="flex items-center justify-center" @click="visible = true">
                     <fa icon="fa-plus" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
                 <Dialog v-model:visible="visible" modal header="Transaction" :style="{ width: '35vw' }">
                     <AddTransactionForm />
                 </Dialog>
-            </div>
-        </template>
-        <template #content>
-            <LatesTransactionList :transactions="latestTransactions" />
-        </template>
-    </Card>
+            </template>
+        </Card>
+
+    </div>
 </template>
+
+<style scoped>
+.p-card {
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.balance-card {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.button-container-card {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.button-animation-left {
+    transition: 0.2s ease-out;
+
+    &:hover {
+        transform: translateX(-0.5rem);
+    }
+}
+
+.button-animation-right {
+    transition: 0.2s ease-out;
+
+    &:hover {
+        transform: translateX(0.5rem);
+    }
+}
+</style>
