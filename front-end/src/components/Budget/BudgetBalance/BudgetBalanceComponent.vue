@@ -1,7 +1,6 @@
 <script>
 import Card from 'primevue/card';
-import Dialog from 'primevue/dialog';
-import AddTransactionForm from './AddTransaction/AddTransactionForm.vue'
+import AddTransactionDialog from './BudgetBalanceAddTransactionDialog.vue'
 import BudgetService from '@/services/BudgetService';
 import BudgetBalanceCard from './BudgetBalanceCard.vue';
 
@@ -15,24 +14,32 @@ export default {
             expanded: false,
             latestTransactions: null,
             latestExpenses: null,
-            latestIncomes: null
+            latestIncomes: null,
         }
     },
     components: {
         Card,
-        Dialog,
-        AddTransactionForm,
-        BudgetBalanceCard
+        AddTransactionDialog,
+        BudgetBalanceCard,
     },
     methods: {
         toggleBalanceExpansion() {
             this.expanded = !this.expanded;
+        },
+        closeDialog() {
+            this.visible = false;
+        },
+        updateTransactions() {
+            this.initTransactions();
+        },
+        async initTransactions() {
+            this.latestTransactions = (await BudgetService.getLatestTransactions()).data;
+            this.latestExpenses = (await BudgetService.getLatestExpenses()).data;
+            this.latestIncomes = (await BudgetService.getLatestIncomes()).data;
         }
     },
     async mounted() {
-        this.latestTransactions = (await BudgetService.getLatestTransactions()).data;
-        this.latestExpenses = (await BudgetService.getLatestExpenses()).data;
-        this.latestIncomes = (await BudgetService.getLatestIncomes()).data;
+        this.initTransactions();
     }
 }
 </script>
@@ -54,9 +61,7 @@ export default {
                 <button class="flex items-center justify-center" @click="visible = true">
                     <fa icon="fa-plus" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
-                <Dialog v-model:visible="visible" modal header="Transaction" :style="{ width: '35vw' }">
-                    <AddTransactionForm />
-                </Dialog>
+                <AddTransactionDialog :visible="visible" @close-dialog="closeDialog" @update-transactions="initTransactions" />
             </template>
         </Card>
 
