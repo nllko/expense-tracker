@@ -29,26 +29,17 @@ export default {
         Button
     },
     methods: {
-        async saveIncome(data) {
-            await BudgetService.saveIncome(data)
-        },
-        async saveExpense(data) {
-            await BudgetService.saveExpense(data)
-        },
         async saveTransaction() {
             const data = {
                 title: this.title,
                 value: this.value,
                 date: this.date,
                 category: this.category,
-                notes: this.notes
+                notes: this.notes,
+                type: this.type
             }
 
-            if (this.type === 'income') {
-                this.saveIncome(data);
-            } else {
-                this.saveExpense(data);
-            }
+            await BudgetService.saveTransaction(data);
         }
     }
 }

@@ -3,37 +3,27 @@ const mongodb = require('mongodb');
 const router = express.Router();
 
 //GET 
-router.get('/incomes', async (req, res) => {
-    const incomes = await loadIncomesCollection();
-    res.status(200).send(await incomes.find({}).toArray());
+router.get('/transactions', async (req, res) => {
+    const transactions = await loadTransactionsCollection();
+    res.status(200).send(await transactions.find({}).toArray());
 })
 
-router.get('/expenses', async (req, res) => {
-    const expenses = await loadExpensesCollection();
-    res.status(200).send(await expenses.find({}).toArray());
+router.get('/transactions/latest', async (req, res) => {
+    const transactions = await loadTransactionsCollection();
+    const latest = await transactions.find().sort({ date: -1 }).limit(3).toArray()
+    res.status(200).send(latest);
 })
 
 //POST
-router.post('/incomes/add', async(req, res) => {
-    const incomes = await loadIncomesCollection();
-    await incomes.insertOne(req.body);
+router.post('/transaction/add', async (req, res) => {
+    const transactions = await loadTransactionsCollection();
+    await transactions.insertOne(req.body);
     res.status(201).send();
 })
 
-router.post('/expenses/add', async(req, res) => {
-    const expenses = await loadExpensesCollection();
-    await expenses.insertOne(req.body);
-    res.status(201).send();
-})
-
-async function loadIncomesCollection() {
+async function loadTransactionsCollection() {
     const client = await mongodb.MongoClient.connect('mongodb://127.0.0.1:27017/')
-    return client.db('vue-tracker').collection('incomes');
-}
-
-async function loadExpensesCollection() {
-    const client = await mongodb.MongoClient.connect('mongodb://127.0.0.1:27017/')
-    return client.db('vue-tracker').collection('expenses');
+    return client.db('vue-tracker').collection('transactions');
 }
 
 module.exports = router;

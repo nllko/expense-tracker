@@ -1,10 +1,10 @@
 import api from '@/services/api'
 
 export default {
-    saveIncome (data) {
-        return api().post('budget/incomes/add', data)
+    saveTransaction (data) {
+        return api().post('budget/transaction/add', data);
     },
-    saveExpense (data) {
-        return api().post('budget/expenses/add', data)
-    },
+    getLatestTransactions () {
+        return api().get('budget/transactions/latest');
+    }
 }
