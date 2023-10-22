@@ -58,7 +58,7 @@ export default {
                     @click="toggleBalanceExpansion">
                     <fa :icon="expanded ? 'angles-left' : 'angles-right'" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
-                <button class="flex items-center justify-center" @click="visible = true">
+                <button class="flex items-center justify-center button-animation-scale" @click="visible = true">
                     <fa icon="fa-plus" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
                 <AddTransactionDialog :visible="visible" @close-dialog="closeDialog" @update-transactions="initTransactions" />
@@ -97,6 +97,14 @@ export default {
 
     &:hover {
         transform: translateX(0.5rem);
+    }
+}
+
+.button-animation-scale {
+    transition: 0.2s ease-out;
+
+    &:hover {
+        transform: scale(1.5);
     }
 }
 </style>
