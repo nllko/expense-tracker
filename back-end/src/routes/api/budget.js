@@ -10,12 +10,32 @@ router.get("/transactions", async (req, res) => {
 
 router.get("/transactions/latest", async (req, res) => {
   const transactions = await loadTransactionsCollection();
-  const latest = await transactions
-    .find(req.query)
+  
+  const latestExpenses = await transactions
+    .find({ type: "expense" })
     .sort({ date: -1 })
     .limit(3)
     .toArray();
-  res.send(latest).status(200);
+
+  const latestIncomes = await transactions
+    .find({ type: "income" })
+    .sort({ date: -1 })
+    .limit(3)
+    .toArray();
+
+  const latestCombined = await transactions
+    .find({ $or: [{ type: "expense" }, { type: "income" }] })
+    .sort({ date: -1 })
+    .limit(3)
+    .toArray();
+
+  res
+    .send({
+      latestExpenses,
+      latestIncomes,
+      latestCombined,
+    })
+    .status(200);
 });
 
 //POST
