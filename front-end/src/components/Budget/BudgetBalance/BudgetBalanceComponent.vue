@@ -41,64 +41,70 @@ export default {
 </script>
 <template>
     <div class="flex">
-        <BudgetBalanceCard class="balance-card" title="Balance" subTitle="Latest Transactions : " :value="balance"
+        <BudgetBalanceCard class="rounded-left" title="Balance" subTitle="Latest Transactions : " :value="balance"
             :latestTransactions="latestTransactions.latestCombined" />
         <BudgetBalanceCard class="pl-4" v-if="expanded" title="Expenses" subTitle="Latest Expenses : " :value="expenses"
             :latestTransactions="latestTransactions.latestExpenses" />
         <BudgetBalanceCard class="pl-4" v-if="expanded" title="Incomes" subTitle="Latest Incomes : " :value="incomes"
             :latestTransactions="latestTransactions.latestIncomes" />
-        <Card class="button-container-card">
+        <Card class="rounded-right">
             <template #title>
-                <button class="flex items-center justify-center"
-                    :class="{ 'button-animation-right': !expanded, 'button-animation-left': expanded }"
+                <button class="flex items-center justify-center transition-hover"
+                    :class="{ 'translate-right-on-hover': !expanded, 'translate-left-on-hover': expanded }"
                     @click="toggleBalanceExpansion">
                     <fa :icon="expanded ? 'angles-left' : 'angles-right'" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
-                <button class="flex items-center justify-center button-animation-scale" @click="visible = true">
+                <button class="flex items-center justify-center transition-hover scale-on-hover" @click="visible = true">
                     <fa icon="fa-plus" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
-                <AddTransactionDialog :visible="visible" @close-dialog="closeDialog" @update-transactions="initTransactions" />
+                <AddTransactionDialog :visible="visible" @close-dialog="closeDialog"
+                    @update-transactions="initTransactions" />
             </template>
         </Card>
 
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+$border-radius: 6px;
+$transition-duration: 0.2s;
+
 .p-card {
     box-shadow: none;
     border-radius: 0;
 }
 
-.balance-card {
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
-}
+.rounded {
+    &-left {
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+    }
 
-.button-container-card {
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-}
-
-.button-animation-left {
-    transition: 0.2s ease-out;
-
-    &:hover {
-        transform: translateX(-0.5rem);
+    &-right {
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
     }
 }
 
-.button-animation-right {
-    transition: 0.2s ease-out;
+.transition-hover {
+    transition: transform $transition-duration ease-out;
+}
 
-    &:hover {
-        transform: translateX(0.5rem);
+.translate {
+    &-left-on-hover {
+        &:hover {
+            transform: translateX(-0.5rem);
+        }
+    }
+
+    &-right-on-hover {
+        &:hover {
+            transform: translateX(0.5rem);
+        }
     }
 }
 
-.button-animation-scale {
-    transition: 0.2s ease-out;
-
+.scale-on-hover {
     &:hover {
         transform: scale(1.5);
     }
