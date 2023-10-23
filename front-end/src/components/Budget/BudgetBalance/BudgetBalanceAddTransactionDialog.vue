@@ -12,7 +12,7 @@ import BudgetService from '@/services/BudgetService'
 export default {
     data() {
         return {
-            formData: null
+            formData: {}
         }
     },
     props: {
@@ -62,41 +62,44 @@ export default {
 }
 </script>
 <template>
-    <Dialog v-model:visible="computedVisible" modal header="Transaction" :style="{ width: '35vw' }">
-        <div class="flex">
-            <div class="flex flex-col w-full">
+    <Dialog v-model:visible="computedVisible" modal header="Transaction">
+        <div class="flex justify-between pb-4">
+            <div class="flex flex-col">
                 <label>Title</label>
-                <InputText type="text" class="w-full" v-model="formData.title" />
+                <InputText type="text" v-model="formData.title" />
             </div>
-        </div>
-        <div class="flex pt-4 justify-between">
-            <div class="flex flex-col">
-                <label>Value</label>
-                <div class="flex">
-                    <InputNumber v-model="formData.value" :maxFractionDigits="2" mode="currency" currency="EUR"
-                        locale="de-DE" />
-                    <div class="flex flex-col pl-4 justify-between">
-                        <div class="flex items-center">
-                            <RadioButton v-model="formData.type" value="expense" />
-                            <label>Expense</label>
-                        </div>
-                        <div class="flex items-center">
-                            <RadioButton v-model="formData.type" value="income" />
-                            <label>Income</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col">
+
+            <div class="flex flex-col pl-4">
                 <label>Date</label>
                 <Calendar v-model="formData.date" dateFormat="dd/mm/yy" showIcon />
             </div>
         </div>
-        <div class="flex flex-col">
+        <hr class="border-zinc-700">
+        <div class="flex justify-between items-center pt-2 pb-4">
+            <div class="flex flex-col">
+                <label>Value</label>
+                <InputNumber v-model="formData.value" :min="0" :maxFractionDigits="2" mode="currency" currency="EUR"
+                    locale="de-DE" />
+            </div>
+            <div class="flex justify-between items-center pr-5">
+                <div class="flex flex-col items-center pr-4">
+                    <label>Expense</label>
+                    <RadioButton v-model="formData.type" value="expense" />
+                </div>
+                <div class="flex flex-col items-center">
+                    <label>Income</label>
+                    <RadioButton v-model="formData.type" value="income" />
+                </div>
+            </div>
+
+        </div>
+        <hr class="border-zinc-700">
+        <div class="flex flex-col pt-2 pb-4">
             <label>Category</label>
             <Dropdown v-model="formData.category" />
         </div>
-        <div class="flex flex-col">
+        <hr class="border-zinc-700">
+        <div class="flex flex-col pt-2">
             <label>Notes</label>
             <Textarea v-model="formData.notes" />
         </div>
@@ -106,3 +109,23 @@ export default {
         </template>
     </Dialog>
 </template>
+
+<style lang="scss" scoped>
+.p-inputnumber,
+.p-calendar,
+.p-inputtext {
+    height: 3rem;
+}
+
+.p-inputtext {
+    width: 14rem;
+    &.p-inputtextarea {
+        height: auto;
+        width: auto;
+    }
+}
+
+.p-calendar {
+    width: 11rem;
+}
+</style>
