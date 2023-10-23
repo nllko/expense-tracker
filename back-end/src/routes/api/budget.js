@@ -11,31 +11,11 @@ router.get("/transactions", async (req, res) => {
 router.get("/transactions/latest", async (req, res) => {
   const transactions = await loadTransactionsCollection();
   const latest = await transactions
-    .find()
+    .find(req.query)
     .sort({ date: -1 })
     .limit(3)
     .toArray();
   res.send(latest).status(200);
-});
-
-router.get("/transactions/latestExpenses", async (req, res) => {
-  const transactions = await loadTransactionsCollection();
-  const latestExpenses = await transactions
-    .find({ type: "expense" })
-    .sort({ date: -1 })
-    .limit(3)
-    .toArray();
-  res.send(latestExpenses).status(200);
-});
-
-router.get("/transactions/latestIncomes", async (req, res) => {
-  const transactions = await loadTransactionsCollection();
-  const latestIncomes = await transactions
-    .find({ type: "income" })
-    .sort({ date: -1 })
-    .limit(3)
-    .toArray();
-  res.send(latestIncomes).status(200);
 });
 
 //POST

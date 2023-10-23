@@ -13,8 +13,9 @@ export default {
             visible: false,
             expanded: false,
             latestTransactions: null,
-            latestExpenses: null,
-            latestIncomes: null,
+            latestExpenseTransactions: null,
+            latestIncomeTransactions: null,
+            test: null
         }
     },
     components: {
@@ -33,9 +34,9 @@ export default {
             this.initTransactions();
         },
         async initTransactions() {
-            this.latestTransactions = (await BudgetService.getLatestTransactions()).data;
-            this.latestExpenses = (await BudgetService.getLatestExpenses()).data;
-            this.latestIncomes = (await BudgetService.getLatestIncomes()).data;
+            this.latestTransactions = (await BudgetService.getLatestTransactionsByType()).data;
+            this.latestExpenseTransactions = (await BudgetService.getLatestTransactionsByType('expense')).data;
+            this.latestIncomeTransactions = (await BudgetService.getLatestTransactionsByType('income')).data;
         }
     },
     async mounted() {
@@ -48,9 +49,9 @@ export default {
         <BudgetBalanceCard class="balance-card" title="Balance" subTitle="Latest Transactions : " :value="balance"
             :latestTransactions="latestTransactions" />
         <BudgetBalanceCard class="pl-4" v-if="expanded" title="Expenses" subTitle="Latest Expenses : " :value="expenses"
-            :latestTransactions="latestExpenses" />
+            :latestTransactions="latestExpenseTransactions" />
         <BudgetBalanceCard class="pl-4" v-if="expanded" title="Incomes" subTitle="Latest Incomes : " :value="incomes"
-            :latestTransactions="latestIncomes" />
+            :latestTransactions="latestIncomeTransactions" />
         <Card class="button-container-card">
             <template #title>
                 <button class="flex items-center justify-center"

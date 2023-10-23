@@ -4,13 +4,9 @@ export default {
     saveTransaction (data) {
         return api().post('budget/transaction/add', data);
     },
-    getLatestTransactions () {
-        return api().get('budget/transactions/latest');
+    getLatestTransactionsByType (type) {
+        return api().get('budget/transactions/latest', {params: {
+            type: type
+        }});
     },
-    getLatestExpenses () {
-        return api().get('budget/transactions/latestExpenses');
-    },
-    getLatestIncomes () {
-        return api().get('budget/transactions/latestIncomes');
-    }
 }
