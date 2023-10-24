@@ -1,19 +1,14 @@
-<script>
+<script setup>
 import Card from 'primevue/card';
-import LatesTransactionList from './LatestTransactions/LatestTransactionsList.vue'
+import LatesTransactionList from './BudgetBalanceLatestTransactionsList.vue'
+import { defineProps } from 'vue';
 
-export default {
-    props: {
-        title: String,
-        subTitle: String,
-        value: Number,
-        latestTransactions: Array
-    },
-    components: {
-        Card,
-        LatesTransactionList
-    }
-}
+defineProps({
+    title: String,
+    subTitle: String,
+    value: Number,
+    latestTransactions: Array
+})
 </script>
 
 <template>

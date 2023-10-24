@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref, onUpdated, defineProps, defineEmits, computed } from 'vue';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber'
@@ -9,57 +10,43 @@ import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
 import BudgetService from '@/services/BudgetService'
 
-export default {
-    data() {
-        return {
-            formData: {}
-        }
+const props = defineProps({
+    visible: Boolean
+})
+
+const formData = ref({});
+const emit = defineEmits(['close-dialog']);
+
+const computedVisible = computed({
+    get() {
+        return props.visible;
     },
-    props: {
-        visible: Boolean
-    },
-    computed: {
-        computedVisible: {
-            get() {
-                return this.visible
-            },
-            set(value) {
-                this.$emit('close-dialog', value);
-            }
-        }
-    },
-    components: {
-        Dialog,
-        InputText,
-        Calendar,
-        Dropdown,
-        RadioButton,
-        InputNumber,
-        Textarea,
-        Button
-    },
-    methods: {
-        initFormData() {
-            this.formData = {
-                title: null,
-                value: null,
-                date: new Date,
-                category: null,
-                notes: null,
-                type: 'income'
-            }
-        },
-        async saveTransaction() {
-            const data = this.formData;
-            await BudgetService.saveTransaction(data);
-            this.computedVisible = false;
-            this.$emit('update-transactions')
-        }
-    },
-    updated() {
-        this.initFormData();
+    set(value) {
+        emit('close-dialog', value);
     }
+})
+
+const initFormData = () => {
+    formData.value = {
+        title: null,
+        value: null,
+        date: new Date(),
+        category: null,
+        notes: null,
+        type: 'income',
+    };
 }
+
+const saveTransaction = async () => {
+    await BudgetService.saveTransaction(formData.value).then(() => {
+        computedVisible.value = false;
+        emit('update-transactions');
+    });
+};
+
+onUpdated(() => {
+    initFormData();
+})
 </script>
 <template>
     <Dialog v-model:visible="computedVisible" modal header="Transaction">
@@ -119,6 +106,7 @@ export default {
 
 .p-inputtext {
     width: 14rem;
+
     &.p-inputtextarea {
         height: auto;
         width: auto;

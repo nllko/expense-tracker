@@ -1,3 +1,13 @@
+<script setup>
+import { ref } from 'vue';
+import SideBarItem from './SideBarItem.vue';
+
+const expanded = ref(true);
+
+const toggleSideBar = () => {
+    expanded.value = !expanded.value;
+}
+</script>
 <template>
     <div class="h-screen bg-zinc-900 rounded-r-md flex flex-col sidebar-animation" :class="expanded ? 'w-48' : 'w-16'">
         <div :class="expanded ? 'px-6 pt-8' : 'pt-6'">
@@ -34,7 +44,7 @@
 
             <div class="pt-2">
                 <ul class="flex flex-col space-y-2">
-                    <SideBarItem to="/settings" icon="gear" :label="expanded ? 'Settings' : ''" :expanded="expanded"/>
+                    <SideBarItem to="/settings" icon="gear" :label="expanded ? 'Settings' : ''" :expanded="expanded" />
                 </ul>
             </div>
         </div>
@@ -62,24 +72,3 @@
     }
 }
 </style>
-<script>
-import SideBarItem from './SideBarItem.vue';
-
-export default {
-    name: 'SideBar',
-    data() {
-        return {
-            expanded: true
-        }
-    },
-    methods: {
-        toggleSideBar() {
-            this.expanded = !this.expanded;
-        }
-    },
-    components: {
-        SideBarItem
-    }
-}
-
-</script>

@@ -1,43 +1,32 @@
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import Card from 'primevue/card';
-import AddTransactionDialog from './BudgetBalanceAddTransactionDialog.vue'
-import BudgetService from '@/services/BudgetService';
+import AddTransactionDialog from './BudgetBalanceAddTransactionDialog.vue'; 
 import BudgetBalanceCard from './BudgetBalanceCard.vue';
+import BudgetService from '@/services/BudgetService';
 
-export default {
-    data() {
-        return {
-            balance: 111.11,
-            expenses: -333.33,
-            incomes: 444.44,
-            visible: false,
-            expanded: false,
-            latestTransactions: {},
-        }
-    },
-    components: {
-        Card,
-        AddTransactionDialog,
-        BudgetBalanceCard,
-    },
-    methods: {
-        toggleBalanceExpansion() {
-            this.expanded = !this.expanded;
-        },
-        closeDialog() {
-            this.visible = false;
-        },
-        updateTransactions() {
-            this.initTransactions();
-        },
-        async initTransactions() {
-            this.latestTransactions = (await BudgetService.getLatestTransactions()).data;
-        }
-    },
-    async mounted() {
-        this.initTransactions();
-    }
-}
+const balance = ref(111.11);
+const expenses = ref(-333.33);
+const incomes = ref(444.44);
+const visible = ref(false);
+const expanded = ref(false);
+const latestTransactions = ref({});
+
+const toggleBalanceExpansion = () => {
+  expanded.value = !expanded.value;
+};
+
+const closeDialog = () => {
+  visible.value = false;
+};
+
+const initTransactions = async () => {
+  latestTransactions.value = (await BudgetService.getLatestTransactions()).data;
+};
+
+onMounted(() => {
+  initTransactions();
+});
 </script>
 <template>
     <div class="flex">
@@ -61,7 +50,6 @@ export default {
                     @update-transactions="initTransactions" />
             </template>
         </Card>
-
     </div>
 </template>
 
