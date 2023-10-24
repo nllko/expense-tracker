@@ -17,8 +17,8 @@ const toggleSideBar = () => {
                         <fa icon="bug" class="h-5" />
                     </a>
                 </RouterLink>
-                <button class="flex items-center justify-center p-0.5 h-6 w-6"
-                    :class="{ 'mt-4 button-animation-right': !expanded, 'button-animation-left': expanded }"
+                <button class="flex items-center justify-center transition-hover p-0.5 h-6 w-6"
+                    :class="{ 'mt-4 translate-right-on-hover': !expanded, 'translate-left-on-hover': expanded }"
                     @click="toggleSideBar">
                     <fa :icon="expanded ? 'angles-left' : 'angles-right'" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
@@ -51,24 +51,24 @@ const toggleSideBar = () => {
     </div>
 </template>
 
-<style scoped>
-.sidebar-animation {
-    transition: 0.2s ease-out;
+<style scoped lang="scss">
+$transition-duration: 0.2s;
+
+.transition-hover {
+    transition: transform $transition-duration ease-out;
 }
 
-.button-animation-left {
-    transition: 0.2s ease-out;
-
-    &:hover {
-        transform: translateX(-0.5rem);
+.translate {
+    &-left-on-hover {
+        &:hover {
+            transform: translateX(-0.5rem);
+        }
     }
-}
 
-.button-animation-right {
-    transition: 0.2s ease-out;
-
-    &:hover {
-        transform: translateX(0.5rem);
+    &-right-on-hover {
+        &:hover {
+            transform: translateX(0.5rem);
+        }
     }
 }
 </style>
