@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onUpdated, defineProps, defineEmits, computed } from 'vue';
+import { ref, onUpdated, defineProps, defineEmits, computed, onMounted } from 'vue';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber'
@@ -9,12 +9,15 @@ import RadioButton from 'primevue/radiobutton';
 import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
 import BudgetService from '@/services/BudgetService'
+import CategoriesService from '@/services/CategoriesService';
 
 const props = defineProps({
     visible: Boolean
 })
 
 const formData = ref({});
+const expenseCategories = ref();
+const incomeCategories = ref();
 const emit = defineEmits(['close-dialog']);
 
 const computedVisible = computed({
@@ -43,6 +46,16 @@ const saveTransaction = async () => {
         emit('update-transactions');
     });
 };
+
+const initCategories = async () => {
+    const categories = (await CategoriesService.getCategories()).data;
+    expenseCategories.value = categories.expenseCategories;
+    incomeCategories.value = categories.incomeCategories;
+}
+
+onMounted(() => {
+    initCategories();
+})
 
 onUpdated(() => {
     initFormData();
@@ -83,7 +96,8 @@ onUpdated(() => {
         <hr class="border-zinc-700">
         <div class="flex flex-col pt-2 pb-4">
             <label>Category</label>
-            <Dropdown v-model="formData.category" />
+            <Dropdown v-model="formData.category"
+                :options="formData.type === 'expense' ? expenseCategories : incomeCategories" optionLabel="name" placeholder="Select a Category"  />
         </div>
         <hr class="border-zinc-700">
         <div class="flex flex-col pt-2">
