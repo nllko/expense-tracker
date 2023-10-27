@@ -16,7 +16,7 @@ defineProps({
             <div class="pr-2">
                 <fa icon="fa-eur" />
                 <span class="pl-1">
-                    {{ transaction.value }}
+                    {{ transaction.amount }}
                 </span>
             </div>
             <span>
