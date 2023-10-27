@@ -10,32 +10,15 @@ router.get("/transactions", async (req, res) => {
 
 router.get("/transactions/latest", async (req, res) => {
   const transactions = await loadTransactionsCollection();
-  
-  const latestExpenses = await transactions
-    .find({ type: "expense" })
+  const query = getFilter(req.query);
+
+  const latestTransactions = await transactions
+    .find(query)
     .sort({ date: -1 })
     .limit(3)
     .toArray();
 
-  const latestIncomes = await transactions
-    .find({ type: "income" })
-    .sort({ date: -1 })
-    .limit(3)
-    .toArray();
-
-  const latestCombined = await transactions
-    .find({ $or: [{ type: "expense" }, { type: "income" }] })
-    .sort({ date: -1 })
-    .limit(3)
-    .toArray();
-
-  res
-    .send({
-      latestExpenses,
-      latestIncomes,
-      latestCombined,
-    })
-    .status(200);
+  res.send(latestTransactions).status(200);
 });
 
 //POST
@@ -44,6 +27,30 @@ router.post("/transaction/add", async (req, res) => {
   await transactions.insertOne(req.body);
   res.send().status(201);
 });
+
+function getFilter(query) {
+  const { type, date } = query;
+  const filter = {};
+
+  if (type) {
+    filter.type = type;
+  }
+
+  if (date) {
+    const startOfMonth = new Date(date);
+    startOfMonth.setDate(1);
+    const endOfMonth = new Date(date);
+    endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+    endOfMonth.setDate(0);
+
+    filter.date = {
+      $gte: startOfMonth.toISOString(),
+      $lte: endOfMonth.toISOString(),
+    };
+  }
+
+  return filter;
+}
 
 async function loadTransactionsCollection() {
   const client = await mongodb.MongoClient.connect(

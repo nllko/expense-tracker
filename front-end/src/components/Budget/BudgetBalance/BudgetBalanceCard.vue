@@ -12,7 +12,7 @@ defineProps({
 </script>
 
 <template>
-    <Card class="w-fit">
+    <Card class="w-48 h-72">
         <template #title>
             <div class="flex items-center justify-between">
                 <span>{{ title }}</span>
