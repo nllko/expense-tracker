@@ -15,10 +15,10 @@ defineProps({
                 :class="transaction.type === 'expense' ? 'text-red-200' : 'text-green-200'">
                 <fa :icon="transaction.type === 'expense' ? 'fa-minus' : 'fa-plus'" class="p-2" />
                 <div class="pr-2">
-                    <fa icon="fa-eur" />
-                    <span class="pl-1">
+                    <span class="pr-1">
                         {{ transaction.amount }}
                     </span>
+                    <fa icon="fa-eur" />
                 </div>
                 <span>
                     {{ transaction.title }}

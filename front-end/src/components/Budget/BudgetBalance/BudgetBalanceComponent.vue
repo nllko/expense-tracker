@@ -1,20 +1,15 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
+import { areDatesOnSameMonthAndYear, getDateMonth } from '@/utils/dateUtils'
 import Card from 'primevue/card';
 import AddTransactionDialog from './BudgetBalanceAddTransactionDialog.vue';
 import BudgetBalanceCard from './BudgetBalanceCard.vue';
-import BudgetService from '@/services/BudgetService';
 import Calendar from 'primevue/calendar';
 
-const balance = ref(111.11);
-const expenses = ref(-333.33);
-const incomes = ref(444.44);
 const visible = ref(false);
 const expanded = ref(false);
 const selectedDate = ref(new Date())
-const latestCombined = ref();
-const latestExpenses = ref();
-const latestIncomes = ref();
+const updateData = ref(false);
 
 const toggleBalanceExpansion = () => {
     expanded.value = !expanded.value;
@@ -24,49 +19,22 @@ const closeDialog = () => {
     visible.value = false;
 };
 
-const isSameDate = () => {
-    const date = new Date();
-    if (selectedDate.value.getMonth() === date.getMonth() && selectedDate.value.getFullYear() === date.getFullYear()) {
-        return true
-    } else {
-        return false
-    }
-}
-
-const getDateMonth = () => {
-    return selectedDate.value.toLocaleString('default', { month: 'long' });
-}
-
-const initTransactions = async () => {
-    const dateString = selectedDate.value.toISOString();
-    latestCombined.value = (await BudgetService.getLatestTransactions(null, dateString)).data;
-    latestExpenses.value = (await BudgetService.getLatestTransactions('expense', dateString)).data;
-    latestIncomes.value = (await BudgetService.getLatestTransactions('income', dateString)).data;
-};
-
-const onCalendarChange = async () => {
-    initTransactions();
-}
-
-onMounted(() => {
-    initTransactions();
-});
 </script>
 <template>
     <div class="flex h-max">
         <BudgetBalanceCard class="rounded-left" title="Balance"
-            :subTitle="isSameDate() ? 'Latest Transactions :' : `${getDateMonth()}'s transactions:`" :value="balance"
-            :latestTransactions="latestCombined" />
+            :subTitle="areDatesOnSameMonthAndYear(selectedDate, new Date()) ? 'Latest Transactions :' : `${getDateMonth(selectedDate)}'s transactions:`"
+            :selectedDate="selectedDate" :updateData="updateData" @data-updated="updateData = false" />
         <BudgetBalanceCard class="pl-4" v-if="expanded" title="Expenses"
-            :subTitle="isSameDate() ? 'Latest Expenses :' : `${getDateMonth()}'s expenses :`" :value="expenses"
-            :latestTransactions="latestExpenses" />
+            :subTitle="areDatesOnSameMonthAndYear(selectedDate, new Date()) ? 'Latest Expenses :' : `${getDateMonth(selectedDate)}'s expenses :`"
+            type="expense" :selectedDate="selectedDate" :updateData="updateData" @data-updated="updateData = false" />
         <BudgetBalanceCard class="pl-4" v-if="expanded" title="Incomes"
-            :subTitle="isSameDate() ? 'Latest Incomes :' : `${getDateMonth()}'s incomes :`" :value="incomes"
-            :latestTransactions="latestIncomes" />
+            :subTitle="areDatesOnSameMonthAndYear(selectedDate, new Date()) ? 'Latest Incomes :' : `${getDateMonth(selectedDate)}'s incomes :`"
+            type="income" :selectedDate="selectedDate" :updateData="updateData" @data-updated="updateData = false" />
         <Card class="pl-4 w-56 custom-padding" v-if="expanded">
             <template #content>
-                <Calendar class="h-64" v-model="selectedDate" view="month" dateFormat="mm/yy" inline :maxDate="new Date()"
-                    @date-select="onCalendarChange" />
+                <Calendar class="h-64" v-model="selectedDate" view="month" dateFormat="mm/yy" inline
+                    :maxDate="new Date()" />
             </template>
         </Card>
         <Card class="rounded-right">
@@ -80,7 +48,7 @@ onMounted(() => {
                     <fa icon="fa-plus" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
                 <AddTransactionDialog :visible="visible" @close-dialog="closeDialog"
-                    @update-transactions="initTransactions" />
+                    @update-transactions="updateData = true" />
             </template>
         </Card>
     </div>
