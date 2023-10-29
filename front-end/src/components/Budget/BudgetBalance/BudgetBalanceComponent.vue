@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { areDatesOnSameMonthAndYear, getDateMonth } from '@/utils/dateUtils'
+import BudgetStore from '@/stores/budgetBalanceStore'
 import Card from 'primevue/card';
 import AddTransactionDialog from './BudgetBalanceAddTransactionDialog.vue';
 import BudgetBalanceCard from './BudgetBalanceCard.vue';
@@ -19,6 +20,9 @@ const closeDialog = () => {
     visible.value = false;
 };
 
+const updateStore = () => {
+    BudgetStore.commit('updateStore', selectedDate.value);
+}
 </script>
 <template>
     <div class="flex h-max">
@@ -34,7 +38,7 @@ const closeDialog = () => {
         <Card class="pl-4 w-56 custom-padding" v-if="expanded">
             <template #content>
                 <Calendar class="h-64" v-model="selectedDate" view="month" dateFormat="mm/yy" inline
-                    :maxDate="new Date()" />
+                    :maxDate="new Date()" @date-select="updateStore" />
             </template>
         </Card>
         <Card class="rounded-right">
@@ -47,8 +51,7 @@ const closeDialog = () => {
                 <button class="flex items-center justify-center transition-hover scale-on-hover" @click="visible = true">
                     <fa icon="fa-plus" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
-                <AddTransactionDialog :visible="visible" @close-dialog="closeDialog"
-                    @update-transactions="updateData = true" />
+                <AddTransactionDialog :selectedDate="selectedDate" :visible="visible" @close-dialog="closeDialog"/>
             </template>
         </Card>
     </div>

@@ -1,8 +1,8 @@
 <script setup>
 import Card from 'primevue/card';
 import LatesTransactionList from './BudgetBalanceLatestTransactionsList.vue'
-import BudgetService from '@/services/BudgetService';
-import { defineProps, onMounted, onUpdated, ref, watch, defineEmits } from 'vue';
+import BudgetStore from '@/stores/budgetBalanceStore'
+import { defineProps, ref, computed } from 'vue';
 
 const props = defineProps({
     title: String,
@@ -12,9 +12,8 @@ const props = defineProps({
     updateData: Boolean,
 })
 
-const latestTransactions = ref();
+const latestTransactions = computed(() => BudgetStore.getters.getTransactionsByType(props.type));
 const amount = ref();
-const emit = defineEmits(['data-updated']);
 
 const getClass = (type) => {
     if (type === 'expense') {
@@ -35,28 +34,6 @@ const getIcon = (type) => {
     }
     return amount.value > 0 ? 'fa-plus' : 'fa-minus';
 }
-
-const initTransactions = async () => {
-    latestTransactions.value = (await BudgetService.getLatestTransactions(props.type, props.selectedDate)).data;
-}
-
-watch(
-    () => props.updateData,
-    (newValue) => {
-        if (newValue) {
-            initTransactions();
-            emit('data-updated');
-        }
-    }
-);
-
-onUpdated(() => {
-    initTransactions()
-})
-
-onMounted(() => {
-    initTransactions()
-})
 </script>
 
 <template>

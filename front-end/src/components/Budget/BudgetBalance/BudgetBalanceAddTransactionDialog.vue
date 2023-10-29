@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onUpdated, defineProps, defineEmits, computed, onMounted, reactive } from 'vue';
+import BudgetStore from '@/stores/budgetBalanceStore'
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber'
@@ -14,7 +15,8 @@ import rules from '../../../validation/AddTransactionFormRules';
 import useVuelidate from '@vuelidate/core';
 
 const props = defineProps({
-    visible: Boolean
+    visible: Boolean,
+    selectedDate: Date
 })
 
 const initialFormState = {
@@ -29,7 +31,7 @@ const formData = reactive({});
 
 const expenseCategories = ref();
 const incomeCategories = ref();
-const emit = defineEmits(['close-dialog', 'update-transactions']);
+const emit = defineEmits(['close-dialog']);
 let v$;
 
 const computedVisible = computed({
@@ -47,7 +49,7 @@ const saveTransaction = async () => {
     if (validationSuccessful) {
         await BudgetService.saveTransaction(formData).then(() => {
             computedVisible.value = false;
-            emit('update-transactions');
+            BudgetStore.commit('updateStore', props.selectedDate);
         });
     }
 };
