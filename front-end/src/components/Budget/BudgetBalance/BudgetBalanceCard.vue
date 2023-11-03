@@ -2,7 +2,7 @@
 import Card from 'primevue/card';
 import LatesTransactionList from './BudgetBalanceLatestTransactionsList.vue'
 import BudgetStore from '@/stores/budgetBalanceStore'
-import { defineProps, ref, computed } from 'vue';
+import { defineProps, computed } from 'vue';
 
 const props = defineProps({
     title: String,
@@ -13,7 +13,7 @@ const props = defineProps({
 })
 
 const latestTransactions = computed(() => BudgetStore.getters.getTransactionsByType(props.type));
-const amount = ref();
+const amount = computed(() => BudgetStore.getters.getBalanceByType(props.type));
 
 const getClass = (type) => {
     if (type === 'expense') {

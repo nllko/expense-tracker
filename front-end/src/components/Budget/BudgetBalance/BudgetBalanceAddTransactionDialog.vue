@@ -23,6 +23,7 @@ const initialFormState = {
     title: null,
     amount: null,
     date: new Date(),
+    createdAt: new Date(),
     category: null,
     notes: null,
     type: 'income',
@@ -112,7 +113,7 @@ onUpdated(() => {
         <div class="flex flex-col pt-2 pb-4">
             <label>Category</label>
             <Dropdown v-model="formData.category"
-                :options="formData.type === 'expense' ? expenseCategories : incomeCategories" optionLabel="name"
+                :options="formData.type === 'expense' ? expenseCategories : incomeCategories" optionLabel="name" optionValue="code"
                 placeholder="Select a Category" :class="{ 'p-invalid': v$.category.$error }" />
             <p v-for="error of v$.category.$errors" v-bind:key="error.$uid" class="text-red-500">{{ error.$message }}</p>
         </div>

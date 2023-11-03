@@ -8,13 +8,32 @@ router.get("/transactions", async (req, res) => {
   res.send(await transactions.find({}).toArray()).status(200);
 });
 
+router.get("/balance", async (req, res) => {
+  const transactions = await loadTransactionsCollection();
+  const filter = getFilter(req.query);
+  const pipeline = [
+    {
+      $match: filter,
+    },
+    {
+      $group: {
+        _id: null,
+        balance: { $sum: "$amount" },
+      },
+    },
+  ];
+  const balance = await transactions.aggregate(pipeline).toArray();
+  res.send(balance[0]).status(200);
+});
+
 router.get("/transactions/latest", async (req, res) => {
   const transactions = await loadTransactionsCollection();
   const query = getFilter(req.query);
+  console.log(req.query);
 
   const latestTransactions = await transactions
     .find(query)
-    .sort({ date: -1 })
+    .sort({ date: -1, createdAt: -1 })
     .limit(3)
     .toArray();
 

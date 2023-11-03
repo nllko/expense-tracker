@@ -12,4 +12,12 @@ export default {
       },
     });
   },
+  getBalance(type, date) {
+    return api().get("budget/balance", {
+      params: {
+        type: type,
+        date: date,
+      }
+    })
+  }
 };
