@@ -1,7 +1,7 @@
-import api from '@/services/api'
+import api from "@/services/api";
 
 export default {
-    getCategories () {
-        return api().get('/categories');
-    }
-}
+  getCategories() {
+    return api().get("/categories");
+  },
+};

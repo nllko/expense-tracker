@@ -54,7 +54,7 @@ const getIcon = (type) => {
             <div class="flex items-center justify-between" :class="getClass(type)">
                 <div v-if="!!amount" class="flex items-center">
                     <fa :icon="getIcon(type)" />
-                    <span class="px-2">{{ (Math.round(Math.abs(amount)* 100) / 100)  }}</span>
+                    <span class="px-2">{{ (Math.round(Math.abs(amount) * 100) / 100) }}</span>
                     <fa icon="fa-eur" />
                 </div>
             </div>

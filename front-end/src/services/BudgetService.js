@@ -17,7 +17,7 @@ export default {
       params: {
         type: type,
         date: date,
-      }
-    })
-  }
+      },
+    });
+  },
 };

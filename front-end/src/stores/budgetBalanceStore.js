@@ -11,21 +11,11 @@ const store = createStore({
   },
   mutations: {
     updateStore: async (state, date) => {
-      state.latestTransactions = (
-        await BudgetService.getLatestTransactions(null, date)
-      ).data;
-      state.latestExpenses = (
-        await BudgetService.getLatestTransactions("expense", date)
-      ).data;
-      state.latestIncomes = (
-        await BudgetService.getLatestTransactions("income", date)
-      ).data;
-      state.totalExpense = (
-        await BudgetService.getBalance("expense", date)
-      ).data.balance;
-      state.totalIncome = (
-        await BudgetService.getBalance("income", date)
-      ).data.balance;
+      state.latestTransactions = (await BudgetService.getLatestTransactions(null, date)).data;
+      state.latestExpenses = (await BudgetService.getLatestTransactions("expense", date)).data;
+      state.latestIncomes = (await BudgetService.getLatestTransactions("income", date)).data;
+      state.totalExpense = (await BudgetService.getBalance("expense", date)).data.balance;
+      state.totalIncome = (await BudgetService.getBalance("income", date)).data.balance;
     },
     toggleTotalBalances: async (state, date) => {
       state.totalExpense = (await BudgetService.getBalance("expense", date)).data.balance;

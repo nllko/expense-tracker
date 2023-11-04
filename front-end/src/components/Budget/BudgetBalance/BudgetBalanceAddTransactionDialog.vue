@@ -85,7 +85,8 @@ onUpdated(() => {
 
             <div class="flex flex-col pl-4">
                 <label>Date</label>
-                <Calendar v-model="formData.date" dateFormat="dd/mm/yy" showIcon :class="{ 'p-invalid': v$.date.$error }" :maxDate="new Date()"/>
+                <Calendar v-model="formData.date" dateFormat="dd/mm/yy" showIcon :class="{ 'p-invalid': v$.date.$error }"
+                    :maxDate="new Date()" />
                 <p v-for="error of v$.date.$errors" v-bind:key="error.$uid" class="text-red-500">{{ error.$message }}</p>
             </div>
         </div>
@@ -113,8 +114,8 @@ onUpdated(() => {
         <div class="flex flex-col pt-2 pb-4">
             <label>Category</label>
             <Dropdown v-model="formData.category"
-                :options="formData.type === 'expense' ? expenseCategories : incomeCategories" optionLabel="name" optionValue="code"
-                placeholder="Select a Category" :class="{ 'p-invalid': v$.category.$error }" />
+                :options="formData.type === 'expense' ? expenseCategories : incomeCategories" optionLabel="name"
+                optionValue="code" placeholder="Select a Category" :class="{ 'p-invalid': v$.category.$error }" />
             <p v-for="error of v$.category.$errors" v-bind:key="error.$uid" class="text-red-500">{{ error.$message }}</p>
         </div>
         <hr class="border-zinc-700">
