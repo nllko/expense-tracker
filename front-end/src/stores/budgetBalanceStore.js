@@ -27,6 +27,10 @@ const store = createStore({
         await BudgetService.getBalance("income", date)
       ).data.balance;
     },
+    toggleTotalBalances: async (state, date) => {
+      state.totalExpense = (await BudgetService.getBalance("expense", date)).data.balance;
+      state.totalIncome = (await BudgetService.getBalance("income", date)).data.balance;
+    },
   },
   getters: {
     getTransactionsByType: (state) => (type) => {
@@ -46,7 +50,7 @@ const store = createStore({
         return state.totalIncome;
       }
       return state.totalIncome - state.totalExpense;
-    }
+    },
   },
 });
 

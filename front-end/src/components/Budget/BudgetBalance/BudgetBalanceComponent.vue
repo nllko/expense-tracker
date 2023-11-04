@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue';
-import { areDatesOnSameMonthAndYear, getDateMonth } from '@/utils/dateUtils'
+import { areDatesOnSameMonthAndYear } from '@/utils/dateUtils'
 import BudgetStore from '@/stores/budgetBalanceStore'
 import Card from 'primevue/card';
+import InputSwitch from 'primevue/inputswitch';
 import AddTransactionDialog from './BudgetBalanceAddTransactionDialog.vue';
 import BudgetBalanceCard from './BudgetBalanceCard.vue';
 import Calendar from 'primevue/calendar';
@@ -10,7 +11,7 @@ import Calendar from 'primevue/calendar';
 const visible = ref(false);
 const expanded = ref(false);
 const selectedDate = ref(new Date())
-const updateData = ref(false);
+const totalMode = ref(true);
 
 const toggleBalanceExpansion = () => {
     expanded.value = !expanded.value;
@@ -22,23 +23,29 @@ const closeDialog = () => {
 
 const updateStore = () => {
     BudgetStore.commit('updateStore', selectedDate.value);
+    totalMode.value = false;
+}
+
+const toggleTotalBalances = () => {
+    if (totalMode.value) {
+        BudgetStore.commit('toggleTotalBalances', selectedDate.value);
+    } else {
+        BudgetStore.commit('toggleTotalBalances');
+    }
 }
 </script>
 <template>
     <div class="flex h-max">
-        <BudgetBalanceCard class="rounded-left" title="Balance"
-            :subTitle="areDatesOnSameMonthAndYear(selectedDate, new Date()) ? 'Latest Transactions :' : `${getDateMonth(selectedDate)}'s transactions:`"
-            :selectedDate="selectedDate" :updateData="updateData" @data-updated="updateData = false" />
-        <BudgetBalanceCard class="pl-4" v-if="expanded" title="Expenses"
-            :subTitle="areDatesOnSameMonthAndYear(selectedDate, new Date()) ? 'Latest Expenses :' : `${getDateMonth(selectedDate)}'s expenses :`"
-            type="expense" :selectedDate="selectedDate" :updateData="updateData" @data-updated="updateData = false" />
-        <BudgetBalanceCard class="pl-4" v-if="expanded" title="Incomes"
-            :subTitle="areDatesOnSameMonthAndYear(selectedDate, new Date()) ? 'Latest Incomes :' : `${getDateMonth(selectedDate)}'s incomes :`"
-            type="income" :selectedDate="selectedDate" :updateData="updateData" @data-updated="updateData = false" />
+        <BudgetBalanceCard class="rounded-left" title="Balance" :selectedDate="selectedDate"
+            :is-total-balance="totalMode" />
+        <BudgetBalanceCard class="pl-4" v-if="expanded" title="Expenses" type="expense" :selectedDate="selectedDate"
+            :is-total-balance="totalMode" />
+        <BudgetBalanceCard class="pl-4" v-if="expanded" title="Incomes" type="income" :selectedDate="selectedDate"
+            :is-total-balance="totalMode" />
         <Card class="pl-4 w-56 custom-padding" v-if="expanded">
             <template #content>
-                <Calendar class="h-64" v-model="selectedDate" view="month" dateFormat="mm/yy" inline
-                    :maxDate="new Date()" @date-select="updateStore" />
+                <Calendar class="h-64" v-model="selectedDate" view="month" dateFormat="mm/yy" inline :maxDate="new Date()"
+                    @date-select="updateStore" />
             </template>
         </Card>
         <Card class="rounded-right">
@@ -51,7 +58,9 @@ const updateStore = () => {
                 <button class="flex items-center justify-center transition-hover scale-on-hover" @click="visible = true">
                     <fa icon="fa-plus" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
-                <AddTransactionDialog :selectedDate="selectedDate" :visible="visible" @close-dialog="closeDialog"/>
+                <InputSwitch :disabled="!areDatesOnSameMonthAndYear(selectedDate, new Date())" class="scale-75"
+                    v-model="totalMode" @click="toggleTotalBalances" />
+                <AddTransactionDialog :selectedDate="selectedDate" :visible="visible" @close-dialog="closeDialog" />
             </template>
         </Card>
     </div>

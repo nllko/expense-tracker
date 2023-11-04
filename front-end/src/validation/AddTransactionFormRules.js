@@ -1,4 +1,4 @@
-import { required, maxLength, helpers } from "@vuelidate/validators";
+import { required, maxLength, minValue, helpers } from "@vuelidate/validators";
 
 const rules = {
   title: {
@@ -7,6 +7,7 @@ const rules = {
   },
   amount: {
     required: helpers.withMessage("Amount is required", required),
+    minValue: helpers.withMessage("Amount shoulde be more than 0", minValue(0.01))
   },
   date: {
     required: helpers.withMessage("Date is required", required),
