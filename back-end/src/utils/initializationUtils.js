@@ -9,6 +9,7 @@ async function initCategories() {
     categories.insertMany([...expenseCategories, ...incomeCategories]);
     console.log("categories initialized");
   }
+  client.close();
 }
 
 function initializeData() {

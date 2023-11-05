@@ -4,12 +4,12 @@ const router = express.Router();
 
 //GET
 router.get("/transactions", async (req, res) => {
-  const transactions = await loadTransactionsCollection();
+  const transactions = await loadTransactionsCollection(req);
   res.send(await transactions.find({}).toArray()).status(200);
 });
 
 router.get("/balance", async (req, res) => {
-  const transactions = await loadTransactionsCollection();
+  const transactions = await loadTransactionsCollection(req);
   const filter = getFilter(req.query);
   const pipeline = [
     {
@@ -27,7 +27,7 @@ router.get("/balance", async (req, res) => {
 });
 
 router.get("/transactions/latest", async (req, res) => {
-  const transactions = await loadTransactionsCollection();
+  const transactions = await loadTransactionsCollection(req);
   const query = getFilter(req.query);
 
   const latestTransactions = await transactions
@@ -41,7 +41,7 @@ router.get("/transactions/latest", async (req, res) => {
 
 //POST
 router.post("/transaction/add", async (req, res) => {
-  const transactions = await loadTransactionsCollection();
+  const transactions = await loadTransactionsCollection(req);
   await transactions.insertOne(req.body);
   res.send().status(201);
 });
@@ -70,9 +70,10 @@ function getFilter(query) {
   return filter;
 }
 
-async function loadTransactionsCollection() {
-  const client = await mongodb.MongoClient.connect(process.env.MONGO_URL);
-  return client.db("vue-tracker").collection("transactions");
+async function loadTransactionsCollection(req) {
+  const db = req.app.locals.db;
+  const transactions = db.collection("transactions");
+  return transactions;
 }
 
 module.exports = router;
