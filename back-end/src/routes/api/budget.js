@@ -29,7 +29,6 @@ router.get("/balance", async (req, res) => {
 router.get("/transactions/latest", async (req, res) => {
   const transactions = await loadTransactionsCollection();
   const query = getFilter(req.query);
-  console.log(req.query);
 
   const latestTransactions = await transactions
     .find(query)
@@ -72,9 +71,7 @@ function getFilter(query) {
 }
 
 async function loadTransactionsCollection() {
-  const client = await mongodb.MongoClient.connect(
-    "mongodb://127.0.0.1:27017/"
-  );
+  const client = await mongodb.MongoClient.connect(process.env.MONGO_URL);
   return client.db("vue-tracker").collection("transactions");
 }
 
