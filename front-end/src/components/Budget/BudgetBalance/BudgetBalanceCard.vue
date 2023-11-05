@@ -46,7 +46,7 @@ const getIcon = (type) => {
 </script>
 
 <template>
-    <Card class="h-72 min-w-[12rem]">
+    <Card class="min-h-[18rem] min-w-[12rem]">
         <template #title>
             <div class="flex items-center justify-between">
                 <span>{{ getTitle }}</span>
