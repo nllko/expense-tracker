@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { areDatesOnSameMonthAndYear } from '@/utils/dateUtils'
-import BudgetStore from '@/stores/budgetBalanceStore'
+import BudgetStore from '@/stores/BudgetStore'
 import Card from 'primevue/card';
 import InputSwitch from 'primevue/inputswitch';
 import AddTransactionDialog from './BudgetBalanceAddTransactionDialog.vue';
@@ -24,14 +24,6 @@ const closeDialog = () => {
 const updateStore = () => {
     BudgetStore.commit('updateStore', selectedDate.value);
     totalMode.value = false;
-}
-
-const toggleTotalBalances = () => {
-    if (totalMode.value) {
-        BudgetStore.commit('toggleTotalBalances', selectedDate.value);
-    } else {
-        BudgetStore.commit('toggleTotalBalances');
-    }
 }
 </script>
 <template>
@@ -59,7 +51,7 @@ const toggleTotalBalances = () => {
                     <fa icon="fa-plus" class="text-green-500 hover:text-green-300 p-2" />
                 </button>
                 <InputSwitch :disabled="!areDatesOnSameMonthAndYear(selectedDate, new Date())" class="scale-75"
-                    v-model="totalMode" @click="toggleTotalBalances" />
+                    v-model="totalMode" />
                 <AddTransactionDialog :selectedDate="selectedDate" :visible="visible" @close-dialog="closeDialog" />
             </template>
         </Card>

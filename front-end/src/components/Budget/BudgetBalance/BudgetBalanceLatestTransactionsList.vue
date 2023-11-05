@@ -1,4 +1,5 @@
 <script setup>
+import { formatNumber } from '@/utils/numberUtils';
 import { defineProps } from 'vue';
 
 defineProps({
@@ -17,7 +18,7 @@ defineProps({
                 <fa :icon="transaction.type === 'expense' ? 'fa-minus' : 'fa-plus'" class="p-2" />
                 <div class="pr-2">
                     <span class="pr-1">
-                        {{ transaction.amount }}
+                        {{ formatNumber(transaction.amount) }}
                     </span>
                     <fa icon="fa-eur" />
                 </div>

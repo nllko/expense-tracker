@@ -1,8 +1,9 @@
 <script setup>
 import Card from 'primevue/card';
-import { areDatesOnSameMonthAndYear, getDateMonth } from '@/utils/dateUtils'
+import { getDateMonth } from '@/utils/dateUtils'
+import { formatNumber } from '@/utils/numberUtils'
 import LatesTransactionList from './BudgetBalanceLatestTransactionsList.vue'
-import BudgetStore from '@/stores/budgetBalanceStore'
+import BudgetStore from '@/stores/BudgetStore'
 import { defineProps, computed } from 'vue';
 
 const props = defineProps({
@@ -12,8 +13,8 @@ const props = defineProps({
     isTotalBalance: Boolean,
 })
 
-const latestTransactions = computed(() => BudgetStore.getters.getTransactionsByType(props.type));
-const amount = computed(() => BudgetStore.getters.getBalanceByType(props.type));
+const latestTransactions = computed(() => BudgetStore.getters.getLatestTransactionsByTypeAndDate(props.type, props.isTotalBalance ? null : props.selectedDate));
+const amount = computed(() => BudgetStore.getters.getBalanceByTypeAndDate(props.type, props.isTotalBalance ? null : props.selectedDate));
 
 const getTitle = computed(() => {
     return props.isTotalBalance ? `Total ${props.title}` : `${getDateMonth(props.selectedDate)}'s ${props.title}`;
@@ -21,7 +22,7 @@ const getTitle = computed(() => {
 
 const getSubtitle = (type) => {
     const string = type ? type : 'transaction';
-    return areDatesOnSameMonthAndYear(props.selectedDate, new Date()) ? `Latest ${string}s :` : `${getDateMonth(props.selectedDate)}'s ${string}s:`
+    return props.isTotalBalance ? `Latest ${string}s :` : `${getDateMonth(props.selectedDate)}'s ${string}s:`
 }
 
 const getClass = (type) => {
@@ -51,11 +52,14 @@ const getIcon = (type) => {
             <div class="flex items-center justify-between">
                 <span>{{ getTitle }}</span>
             </div>
-            <div class="flex items-center justify-between" :class="getClass(type)">
-                <div v-if="!!amount" class="flex items-center">
+            <div class="flex items-center justify-between">
+                <div v-if="!!amount" class="flex items-center" :class="getClass(type)">
                     <fa :icon="getIcon(type)" />
-                    <span class="px-2">{{ (Math.round(Math.abs(amount) * 100) / 100) }}</span>
+                    <span class="px-2">{{ formatNumber(amount) }}</span>
                     <fa icon="fa-eur" />
+                </div>
+                <div v-if="!amount">
+                    <span class="px-2">{{ 0 }}</span>
                 </div>
             </div>
         </template>

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onUpdated, defineProps, defineEmits, computed, onMounted, reactive } from 'vue';
-import BudgetStore from '@/stores/budgetBalanceStore'
+import BudgetStore from '@/stores/BudgetStore'
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber'
@@ -48,6 +48,9 @@ const saveTransaction = async () => {
     const validationSuccessful = await v$.value.$validate();
 
     if (validationSuccessful) {
+        if (formData.type === 'expense') {
+            formData.amount =  formData.amount * -1;
+        }
         await BudgetService.saveTransaction(formData).then(() => {
             computedVisible.value = false;
             BudgetStore.commit('updateStore', props.selectedDate);
