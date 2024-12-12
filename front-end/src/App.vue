@@ -1,0 +1,31 @@
+<script setup>
+import {useTransactionsStore} from "@/stores/TransactionsStore";
+import {onMounted} from "vue";
+
+const store = useTransactionsStore();
+
+console.log(store.allTransactions)
+onMounted(() => {
+  store.initTransactions();
+})
+console.log(store.allTransactions)
+
+</script>
+
+<template>
+  <img alt="Vue logo" src="./assets/logo.png">
+  <div>
+    {{store.allTransactions}}
+  </div>
+</template>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
