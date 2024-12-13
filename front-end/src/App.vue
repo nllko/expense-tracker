@@ -1,31 +1,28 @@
 <script setup>
-import {useTransactionsStore} from "@/stores/TransactionsStore";
+import TransactionsView from "@/views/TransactionsView.vue";
 import {onMounted} from "vue";
+import {useTransactionsStore} from "@/stores/TransactionsStore";
 
 const store = useTransactionsStore();
 
-console.log(store.allTransactions)
 onMounted(() => {
   store.initTransactions();
 })
-console.log(store.allTransactions)
-
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <div>
-    {{store.allTransactions}}
-  </div>
+  <transactions-view />
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
+
+html, body {
+  font-family: 'Roboto', sans-serif;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--core);
 }
 </style>
