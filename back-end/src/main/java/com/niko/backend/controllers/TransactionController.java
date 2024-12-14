@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/transactions")
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -25,7 +25,7 @@ public class TransactionController {
         return transactionService.save(transactionMapper.toEntity(dto));
     }
 
-    @GetMapping("/transactions")
+    @GetMapping("/all")
     public List<Transaction> getTransactions() {
         return transactionService.findAll();
     }

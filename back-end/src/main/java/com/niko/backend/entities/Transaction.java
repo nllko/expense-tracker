@@ -23,11 +23,14 @@ public class Transaction {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
     @CreationTimestamp
+    @Column(name = "createdAt")
     private Timestamp createdAt;
 
 }
