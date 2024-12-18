@@ -14,15 +14,15 @@ import java.math.BigDecimal;
 public class BalancesDTO {
     private String year;
     private String month;
-    private String totalBalance;
-    private String totalExpenses;
-    private String totalIncome;
+    private BigDecimal balance;
+    private BigDecimal expenses;
+    private BigDecimal income;
 
-    public BalancesDTO(int year, int month, BigDecimal totalBalance, BigDecimal totalExpenses, BigDecimal totalIncome) {
+    public BalancesDTO(int year, int month, BigDecimal balance, BigDecimal expenses, BigDecimal income) {
         this.year = String.valueOf(year);
         this.month = String.valueOf(month);
-        this.totalBalance = String.valueOf(totalBalance);
-        this.totalExpenses = String.valueOf(totalExpenses);
-        this.totalIncome = String.valueOf(totalIncome);
+        this.balance = balance;
+        this.expenses = expenses;
+        this.income = income;
     }
 }

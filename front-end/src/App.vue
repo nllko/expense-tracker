@@ -1,17 +1,8 @@
 <script setup>
-import TransactionsView from "@/views/TransactionsView.vue";
-import {onMounted} from "vue";
-import {useTransactionsStore} from "@/stores/TransactionsStore";
-
-const store = useTransactionsStore();
-
-onMounted(() => {
-  store.initTransactions();
-})
 </script>
 
 <template>
-  <transactions-view />
+  <router-view />
 </template>
 
 <style>
