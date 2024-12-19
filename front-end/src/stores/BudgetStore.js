@@ -1,11 +1,10 @@
 import {defineStore} from 'pinia'
 import TransactionsService from "@/services/TransactionsService";
-import BalanceService from "@/services/BalanceService";
 
 export const useBudgetStore = defineStore('budget', {
     state: () => ({
         transactions: [],
-        balance: null,
+        total: null,
         expenses: null,
         income: null,
     }),
@@ -13,8 +12,8 @@ export const useBudgetStore = defineStore('budget', {
         allTransactions(state) {
             return state.transactions.data
         },
-        getBalance(state) {
-            return state.balance;
+        getTotal(state) {
+            return state.total;
         },
         getExpenses(state) {
             return state.expenses;
@@ -25,16 +24,25 @@ export const useBudgetStore = defineStore('budget', {
     },
     actions: {
         async init() {
-            try {
-                this.transactions = await TransactionsService.getTransactions();
-                await BalanceService.getBalance(2024, 12).then((response) => {
-                    this.balance = response.data.balance;
-                    this.expenses = response.data.expenses;
-                    this.income = response.data.income;
-                })
-            } catch (error) {
+            await this.initTransactions();
+            await this.initMonthlySummary();
+        },
+        async initTransactions() {
+            await TransactionsService.getTransactions().then(response => {
+                this.transactions = response.data.transactions;
+            }).catch(error => {
                 console.error(error);
-            }
+            });
+        },
+        async initMonthlySummary() {
+            const currentDate = new Date();
+            await TransactionsService.getMonthlySummary(currentDate.getFullYear(), currentDate.getMonth() + 1).then((response) => {
+                this.total = response.data.total;
+                this.expenses = response.data.expenses;
+                this.income = response.data.income;
+            }).catch((error) => {
+                console.error(error);
+            })
         }
     }
 })

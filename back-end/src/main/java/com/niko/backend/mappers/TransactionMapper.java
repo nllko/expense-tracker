@@ -2,9 +2,8 @@ package com.niko.backend.mappers;
 
 import com.niko.backend.DTOs.TransactionDTO;
 import com.niko.backend.entities.Transaction;
+import com.niko.backend.enums.TransactionType;
 import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
 
 @Component
 public class TransactionMapper {
@@ -12,11 +11,9 @@ public class TransactionMapper {
         Transaction transaction = new Transaction();
         transaction.setName(transactionDTO.getName());
         transaction.setDescription(transactionDTO.getDescription());
-        transaction.setAmount(parseString(transactionDTO.getAmount()));
+        transaction.setAmount(transactionDTO.getAmount());
+        transaction.setType(TransactionType.valueOf(transactionDTO.getType()));
+        transaction.setDate(transactionDTO.getDate());
         return transaction;
-    }
-
-    private BigDecimal parseString(String string) {
-        return new BigDecimal(string);
     }
 }

@@ -1,11 +1,13 @@
 package com.niko.backend.entities;
 
+import com.niko.backend.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -28,6 +30,13 @@ public class Transaction {
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
+
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
+
+    @Column(name = "date")
+    private LocalDateTime date;
 
     @CreationTimestamp
     @Column(name = "createdAt")

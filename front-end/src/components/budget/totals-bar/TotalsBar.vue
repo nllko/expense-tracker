@@ -7,7 +7,7 @@ const store = useBudgetStore();
 
 <template>
   <div class="flex">
-    <balance-card title="Total" :balance="store.getBalance" :latest="[]" />
+    <balance-card title="Total" :balance="store.getTotal" :latest="[]" />
     <balance-card title="Expense" :balance="store.getExpenses" :latest="[]" />
     <balance-card title="Income" :balance="store.getIncome" :latest="[]" />
   </div>
