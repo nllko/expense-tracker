@@ -20,10 +20,8 @@
   background-color: var(--mantle);
   color: #fff;
   padding: 16px;
-  border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 400px;
-  margin: auto;
 }
 
 .card-header {
@@ -31,7 +29,6 @@
 }
 
 .divider {
-  border: none;
   border-top: 1px solid #444;
   margin: 16px 0;
 }
