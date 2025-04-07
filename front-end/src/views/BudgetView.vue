@@ -11,8 +11,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <totals-bar/>
-
+  <div class="h-screen p-4">
+    <totals-bar/>
+  </div>
 </template>
 
 <style scoped>

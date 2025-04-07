@@ -7,10 +7,10 @@ const store = useBudgetStore();
 </script>
 
 <template>
-  <div class="flex">
-    <balance-card class="card-left" title="Total" :balance="store.getTotal" :latest="store.getLatestTransactions" />
-    <balance-card v-show="store.isExpanded" title="Expense" :balance="store.getExpenses" :latest="store.getLatestExpenses" />
-    <balance-card v-show="store.isExpanded" title="Income" :balance="store.getIncome" :latest="store.getLatestIncomes" />
+  <div class="flex h-min">
+    <balance-card class="card-left" title="Total" subtitle="Latest transactions :" :balance="store.getTotal" :latest="store.getLatestTransactions" />
+    <balance-card v-show="store.isExpanded" title="Expense" subtitle="Latest expenses :" :balance="store.getExpenses" :latest="store.getLatestExpenses" />
+    <balance-card v-show="store.isExpanded" title="Income" subtitle="Latest incomes :" :balance="store.getIncome" :latest="store.getLatestIncomes" />
     <buttons-card class="card-right" />
   </div>
 </template>

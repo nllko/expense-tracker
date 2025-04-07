@@ -1,14 +1,26 @@
 import api from "@/services/api";
 
+const URL = "/transactions"
+
 export default {
-    getTransactions() {
-        return api().get("/transactions/all");
+    getAllTransactions() {
+        return api().get(URL + "/all")
     },
-    getMonthlySummary(year, month) {
-        return api().get("/transactions/summary", {
+    getTransactionsByPeriod(startDate, endDate) {
+        return api().get(URL, {
             params: {
-                year: year, month: month,
+                startDate: startDate, endDate: endDate,
             }
         });
+    },
+    getBalanceByPeriod(startDate, endDate) {
+        return api().get(URL + "/balance", {
+            params: {
+                startDate: startDate, endDate: endDate,
+            }
+        });
+    },
+    getTotalBalance() {
+        return api().get(URL + "/balance/total");
     }
 };
