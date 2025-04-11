@@ -1,8 +1,8 @@
 <script setup>
 import {useBudgetStore} from "@/stores/BudgetStore";
+import AddTransaction from "@/components/budget/add-transaction/AddTransaction.vue";
 
 const store = useBudgetStore();
-
 </script>
 
 <template>
@@ -11,9 +11,7 @@ const store = useBudgetStore();
       <fa-icon v-if="!store.isExpanded" icon="angles-right"/>
       <fa-icon v-if="store.isExpanded" icon="angles-left"/>
     </button>
-    <button class="button scale">
-      <fa-icon icon="fa-plus"/>
-    </button>
+    <add-transaction/>
   </div>
 </template>
 
@@ -39,9 +37,4 @@ const store = useBudgetStore();
 .move-left:hover {
   transform: translateX(-0.5rem);
 }
-
-.scale:hover {
-  transform: scale(1.5);
-}
-
 </style>
