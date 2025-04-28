@@ -31,8 +31,17 @@ const preset = definePreset(Material, {
                     800: '#262626',
                     900: '#141414',
                     950: '#151515'
+                },
+                formField: {
+                    invalidBorderColor: '#ef4444',
+                    invalidPlaceholderColor: '#ef4444'
                 }
             }
+        }
+    },
+    primitive: {
+        red: {
+            500: '#ef4444',
         }
     },
     components: {

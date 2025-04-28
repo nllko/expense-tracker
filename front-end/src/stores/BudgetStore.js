@@ -83,6 +83,13 @@ export const useBudgetStore = defineStore('budget', {
             }).catch((error) => {
                 console.error(error);
             })
+        },
+        async saveTransaction(transaction) {
+            await TransactionsService.saveTransaction(transaction).then(() => {
+                this.init();
+            }).catch((error) => {
+                console.error(error);
+            })
         }
     }
 })

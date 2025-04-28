@@ -5,6 +5,7 @@ defineProps({
   label: String,
   required: Boolean,
   message: String,
+  errorMessages: Array,
 });
 </script>
 
@@ -12,12 +13,32 @@ defineProps({
   <div>
     <float-label variant="on">
       <slot></slot>
-      <label>{{ label }}<span v-if="required" class="text-red">*</span></label>
+      <label class="z-10">{{ label }}<span v-if="required" class="text-red">*</span></label>
     </float-label>
-    <Message size="small" severity="secondary" variant="simple">{{ message }}</Message>
+    <Transition name="slide-up">
+      <Message v-if="!errorMessages" size="small" severity="secondary" variant="simple">{{ message }}</Message>
+      <Message v-else-if="errorMessages" v-for="msg in errorMessages" v-bind:key="msg" size="small" severity="error" variant="simple">
+        {{ msg }}
+      </Message>
+    </Transition>
   </div>
 </template>
 
 <style scoped>
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.2s ease-out;
+}
 
+.slide-up-enter-from {
+  position: absolute;
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.slide-up-leave-to {
+  position: absolute;
+  opacity: 0;
+  transform: translateX(50px);
+}
 </style>
