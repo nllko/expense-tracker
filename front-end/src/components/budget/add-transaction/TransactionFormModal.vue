@@ -10,7 +10,7 @@ const store = useBudgetStore();
 
 const schema = yup.object({
   name: yup.string().required().label("Name"),
-  description: yup.string().optional(),
+  description: yup.string().optional().label("Description"),
   amount: yup.number().required().notOneOf([0],"Amount can't be 0").label("Amount"),
   type: yup.string().required().label("Type"),
   date: yup.date().required().max(new Date(),"Date can't be in the future").label("Date")
@@ -97,7 +97,6 @@ const handleTypes = (value) => {
           </div>
         </floating-input>
 
-      {{values.date}}
         <floating-input label="Date"
                         message="Enter the date of transaction"
                         :error-messages="errorBag.date"

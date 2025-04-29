@@ -15,7 +15,7 @@ defineProps({
       <slot></slot>
       <label class="z-10">{{ label }}<span v-if="required" class="text-red">*</span></label>
     </float-label>
-    <Transition name="slide-up">
+    <Transition name="slide-right">
       <Message v-if="!errorMessages" size="small" severity="secondary" variant="simple">{{ message }}</Message>
       <Message v-else-if="errorMessages" v-for="msg in errorMessages" v-bind:key="msg" size="small" severity="error" variant="simple">
         {{ msg }}
@@ -25,18 +25,18 @@ defineProps({
 </template>
 
 <style scoped>
-.slide-up-enter-active,
-.slide-up-leave-active {
+.slide-right-enter-active,
+.slide-right-leave-active {
   transition: all 0.2s ease-out;
 }
 
-.slide-up-enter-from {
+.slide-right-enter-from {
   position: absolute;
   opacity: 0;
   transform: translateX(-50px);
 }
 
-.slide-up-leave-to {
+.slide-right-leave-to {
   position: absolute;
   opacity: 0;
   transform: translateX(50px);

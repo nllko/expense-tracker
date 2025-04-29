@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="bg-mantle p-4 text-white shadow-sm max-w-md">
+  <div class="bg-mantle p-4 text-white shadow-sm">
     <div class="mb-2">
       <slot name="title" />
       <slot name="sub-title" />
@@ -16,10 +16,6 @@
 </template>
 
 <style scoped>
-.bg-mantle {
-  background-color: var(--mantle);
-}
-
 .border-gray {
   border: 1px solid var(--gray);
 }

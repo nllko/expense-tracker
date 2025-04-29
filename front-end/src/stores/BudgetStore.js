@@ -17,10 +17,10 @@ export const useBudgetStore = defineStore('budget', {
     }),
     getters: {
         isExpanded(state) {
-            return state.expanded
+            return state.expanded;
         },
         getTransactions(state) {
-            return state.transactions
+            return state.transactions;
         },
         getTotal(state) {
             return state.total.balance;
@@ -41,11 +41,19 @@ export const useBudgetStore = defineStore('budget', {
         getLatestIncomes(state) {
             const filteredTransactions = state.selected.transactions.filter(transaction => transaction.type === "INCOME");
             return sortTransactions(filteredTransactions);
+        },
+        getMonthName(state) {
+            return  state.selectedDate.toLocaleString('default', { month: 'long' });
         }
     },
     actions: {
         toggleExpanded() {
             this.expanded = !this.expanded;
+        },
+        async changeDate(newDate) {
+          this.selectedDate = newDate;
+          await this.initSelectedTransactions();
+          await this.initSelectedBalance();
         },
         async init() {
             await this.initTotalTransactions();
