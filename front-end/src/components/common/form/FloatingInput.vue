@@ -15,12 +15,23 @@ defineProps({
       <slot></slot>
       <label class="z-10">{{ label }}<span v-if="required" class="text-red">*</span></label>
     </float-label>
-    <Transition name="slide-right">
-      <Message v-if="!errorMessages" size="small" severity="secondary" variant="simple">{{ message }}</Message>
-      <Message v-else-if="errorMessages" v-for="msg in errorMessages" v-bind:key="msg" size="small" severity="error" variant="simple">
+    <TransitionGroup name="slide-right">
+      <Message v-if="!errorMessages"
+               key="regular-msg"
+               size="small"
+               severity="secondary"
+               variant="simple">
+        {{ message }}
+      </Message>
+      <Message v-else-if="errorMessages"
+               v-for="msg in errorMessages"
+               :key="msg"
+               size="small"
+               severity="error"
+               variant="simple">
         {{ msg }}
       </Message>
-    </Transition>
+    </TransitionGroup>
   </div>
 </template>
 

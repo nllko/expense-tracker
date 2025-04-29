@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono');
+
 :root {
     --crust: #22c55e;
     --mantle: #1e1e1e;
@@ -6,6 +8,11 @@
     --light-green: #bbf7d0;
     --red: #ef4444;
     --gray: #696969;
+}
+
+html, body {
+    font-family: 'Roboto Mono', sans-serif;
+    background-color: var(--core);
 }
 
 .green-btn {

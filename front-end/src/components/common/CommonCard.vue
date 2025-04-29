@@ -8,7 +8,7 @@
       <slot name="title" />
       <slot name="sub-title" />
     </div>
-    <hr class="border-gray my-1" />
+    <hr class="border-gray-500 my-1" />
     <div>
       <slot name="content" />
     </div>
@@ -16,7 +16,4 @@
 </template>
 
 <style scoped>
-.border-gray {
-  border: 1px solid var(--gray);
-}
 </style>
