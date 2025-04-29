@@ -1,7 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono');
+
 :root {
     --crust: #22c55e;
     --mantle: #1e1e1e;
     --core: #262626;
     --green: #22c55e;
+    --light-green: #bbf7d0;
     --red: #ef4444;
+    --gray: #696969;
+}
+
+html, body {
+    font-family: 'Roboto Mono', sans-serif;
+    background-color: var(--core);
+}
+
+.green-btn {
+    color: var(--green);
+    background: none;
+    transition: transform 0.2s ease-out;
+    font-size: 1.5rem;
+
+    &:hover {
+        color: var(--light-green);
+        &.btn-scale {
+            transform: scale(1.5);
+        }
+        &.btn-move-r {
+            transform: translateX(0.5rem);
+        }
+        &.btn-move-l {
+            transform: translateX(-0.5rem);
+        }
+    }
 }
