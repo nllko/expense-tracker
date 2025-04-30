@@ -10,9 +10,10 @@
     --gray: #696969;
 }
 
-html, body {
+html, body, #app {
     font-family: 'Roboto Mono', sans-serif;
     background-color: var(--core);
+    height: 100%;
 }
 
 .green-btn {

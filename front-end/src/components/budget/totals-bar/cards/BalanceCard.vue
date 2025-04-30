@@ -1,6 +1,6 @@
 <script setup>
 import CommonCard from "@/components/common/CommonCard.vue";
-import CurrencyText from "@/components/budget/totals-bar/cards/fields/CurrencyText.vue";
+import CurrencyText from "@/components/common/fields/CurrencyText.vue";
 defineProps({
   title: String,
   subtitle: String,

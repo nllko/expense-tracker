@@ -5,6 +5,7 @@ import {useForm} from "vee-validate";
 import * as yup from 'yup';
 import FloatingInput from "@/components/common/form/FloatingInput.vue";
 import {useBudgetStore} from "@/stores/BudgetStore";
+import {DATE_FORMAT} from "@/utils/dateUtils";
 
 const store = useBudgetStore();
 
@@ -101,7 +102,11 @@ const handleTypes = (value) => {
                         message="Enter the date of transaction"
                         :error-messages="errorBag.date"
                         required>
-          <date-picker name="date" v-model="date" :max-date="new Date()" :invalid="!!errors.date" class="w-full" />
+          <date-picker name="date" v-model="date"
+                       :dateFormat="DATE_FORMAT"
+                       :max-date="new Date()"
+                       :invalid="!!errors.date"
+                       class="w-full" />
         </floating-input>
 
       <floating-input label="Description" message="Enter the description of your transaction">
