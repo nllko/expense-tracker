@@ -1,116 +1,90 @@
 import {defineStore} from 'pinia'
 import TransactionsService from "@/services/TransactionsService";
+import {computed, ref} from "vue";
+import {getMonthPeriod} from "@/utils/dateUtils";
 
-export const useBudgetStore = defineStore('budget', {
-    state: () => ({
-        expanded: false,
-        total: {
-            balance: null,
-            transactions: []
-        },
-        selected: {
-            expenses: null,
-            income: null,
-            transactions: [],
-        },
-        selectedDate: new Date(),
-    }),
-    getters: {
-        isExpanded(state) {
-            return state.expanded;
-        },
-        getTransactions(state) {
-            return state.transactions;
-        },
-        getTotal(state) {
-            return state.total.balance;
-        },
-        getExpenses(state) {
-            return state.selected.expenses;
-        },
-        getIncome(state) {
-            return state.selected.income;
-        },
-        getLatestTransactions(state) {
-            return sortTransactions(state.total.transactions);
-        },
-        getLatestExpenses(state) {
-            const filteredTransactions = state.selected.transactions.filter(transaction => transaction.type === "EXPENSE");
-            return sortTransactions(filteredTransactions);
-        },
-        getLatestIncomes(state) {
-            const filteredTransactions = state.selected.transactions.filter(transaction => transaction.type === "INCOME");
-            return sortTransactions(filteredTransactions);
-        },
-        getMonthName(state) {
-            return  state.selectedDate.toLocaleString('default', { month: 'long' });
-        }
-    },
-    actions: {
-        toggleExpanded() {
-            this.expanded = !this.expanded;
-        },
-        async changeDate(newDate) {
-          this.selectedDate = newDate;
-          await this.initSelectedTransactions();
-          await this.initSelectedBalance();
-        },
-        async init() {
-            await this.initTotalTransactions();
-            await this.initSelectedTransactions();
-            await this.initTotalBalance();
-            await this.initSelectedBalance();
-        },
-        async initTotalTransactions() {
-            await TransactionsService.getAllTransactions().then(response => {
-                this.total.transactions = response.data;
-            }).catch(error => {
+export const useBudgetStore = defineStore("budget", () => {
+    const expanded = ref(false);
+    const selectedDate = ref(null);
+    const transactions = ref([]);
+    const balances = ref({
+        total: null,
+        expenses: null,
+        incomes: null
+    });
+
+    const latestTotal = computed(() => {
+        return transactions.value.slice(0,5);
+    });
+    const latestExpenses = computed(() => {
+        return transactions.value.filter(transaction => transaction.type === "EXPENSE").slice(0,5);
+    });
+    const latestIncomes = computed(() => {
+        return transactions.value.filter(transaction => transaction.type === "EXPENSE").slice(0,5);
+    });
+
+    const toggleExpanded = () => {
+        expanded.value = !expanded.value;
+    };
+
+    const fetchTransactions = async () => {
+        if (selectedDate.value) {
+            const {startDate, endDate} = getMonthPeriod(selectedDate.value);
+            await TransactionsService.getTransactionsByPeriod(startDate, endDate).then((response) => {
+                transactions.value = response.data;
+            }).catch((error) => {
                 console.error(error);
             });
-        },
-        async initSelectedTransactions() {
-            const {firstDayOfMonth, lastDayOfMonth} = getPeriod(this.selectedDate);
-            await TransactionsService.getTransactionsByPeriod(firstDayOfMonth, lastDayOfMonth).then(response => {
-                this.selected.transactions = response.data;
-            }).catch(error => {
+        } else {
+            await TransactionsService.getAllTransactions().then((response) => {
+                transactions.value = response.data;
+            }).catch((error) => {
                 console.error(error);
             });
-        },
-        async initTotalBalance() {
-            await TransactionsService.getTotalBalance().then(response => {
-                this.total.balance = response.data.balance;
-            }).catch((error) => {
-                console.error(error);
-            })
-        },
-        async initSelectedBalance() {
-            const {firstDayOfMonth, lastDayOfMonth} = getPeriod(this.selectedDate);
-            await TransactionsService.getBalanceByPeriod(firstDayOfMonth, lastDayOfMonth).then((response) => {
-                this.selected.expenses = response.data.expenses;
-                this.selected.income = response.data.income;
-            }).catch((error) => {
-                console.error(error);
-            })
-        },
-        async saveTransaction(transaction) {
-            await TransactionsService.saveTransaction(transaction).then(() => {
-                this.init();
-            }).catch((error) => {
-                console.error(error);
-            })
         }
+    };
+
+    const fetchBalances = async () => {
+        if (selectedDate.value) {
+            const {startDate, endDate} = getMonthPeriod(selectedDate.value);
+            await TransactionsService.getBalanceByPeriod(startDate, endDate).then((response) => {
+                balances.value.total = response.data.total;
+                balances.value.expenses = response.data.expenses;
+                balances.value.incomes = response.data.incomes;
+            }).catch((error) => {
+                console.error(error)
+            });
+        } else {
+            await TransactionsService.getTotalBalance().then((response) => {
+                balances.value.total = response.data.total;
+                balances.value.expenses = response.data.expenses;
+                balances.value.incomes = response.data.incomes;
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+    };
+
+    const saveTransaction = async (transaction) => {
+        await TransactionsService.saveTransaction(transaction).then(() => {
+            fetchBalances();
+            fetchTransactions();
+        }).catch((error) => {
+            console.error(error)
+        });
     }
-})
 
-const sortTransactions = (transactions) => {
-  const sortedTransactions = transactions.sort(
-    (a, b) => new Date(b.date) - new Date(a.date)
-  );
-  return sortedTransactions.slice(0, 3);
-};
-
-const getPeriod = (date) => {
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    return {firstDayOfMonth: firstDay, lastDayOfMonth: lastDay}
-}
+    return {
+        expanded,
+        selectedDate,
+        transactions,
+        balances,
+        latestTotal,
+        latestExpenses,
+        latestIncomes,
+        toggleExpanded,
+        fetchTransactions,
+        fetchBalances,
+        saveTransaction
+    }
+});

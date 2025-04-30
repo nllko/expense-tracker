@@ -1,13 +1,14 @@
 <script setup>
 import TotalsBar from "@/components/budget/totals-bar/TotalsBar.vue";
 import {useBudgetStore} from "@/stores/BudgetStore";
-import {onMounted} from "vue";
+import {onBeforeMount} from "vue";
 
 const store = useBudgetStore();
 
-onMounted(() => {
-  store.init();
-})
+onBeforeMount(() => {
+  store.fetchBalances();
+  store.fetchTransactions();
+});
 </script>
 
 <template>
