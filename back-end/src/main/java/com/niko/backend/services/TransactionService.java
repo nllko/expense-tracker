@@ -34,10 +34,10 @@ public class TransactionService {
     }
 
     public List<Transaction> findAll() {
-        return transactionRepository.findAll();
+        return transactionRepository.findAllByOrderByDateDescCreatedAtDesc();
     }
 
     public List<Transaction> geTransactionsByPeriod(LocalDateTime startDate, LocalDateTime endDate) {
-        return transactionRepository.findByDateBetween(startDate, endDate);
+        return transactionRepository.findByDateBetweenOrderByDateDescCreatedAtDesc(startDate, endDate);
     }
 }

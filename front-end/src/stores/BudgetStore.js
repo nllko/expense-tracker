@@ -20,7 +20,7 @@ export const useBudgetStore = defineStore("budget", () => {
         return transactions.value.filter(transaction => transaction.type === "EXPENSE").slice(0,5);
     });
     const latestIncomes = computed(() => {
-        return transactions.value.filter(transaction => transaction.type === "EXPENSE").slice(0,5);
+        return transactions.value.filter(transaction => transaction.type === "INCOME").slice(0,5);
     });
 
     const toggleExpanded = () => {
@@ -65,15 +65,6 @@ export const useBudgetStore = defineStore("budget", () => {
         }
     };
 
-    const saveTransaction = async (transaction) => {
-        await TransactionsService.saveTransaction(transaction).then(() => {
-            fetchBalances();
-            fetchTransactions();
-        }).catch((error) => {
-            console.error(error)
-        });
-    }
-
     return {
         expanded,
         selectedDate,
@@ -85,6 +76,5 @@ export const useBudgetStore = defineStore("budget", () => {
         toggleExpanded,
         fetchTransactions,
         fetchBalances,
-        saveTransaction
     }
 });

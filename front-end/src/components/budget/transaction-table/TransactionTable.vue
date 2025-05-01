@@ -1,8 +1,8 @@
 <script setup>
 import {DataTable, Column, Tag} from "primevue";
 import {useBudgetStore} from "@/stores/BudgetStore";
-import {formatDate} from "@/utils/dateUtils";
 import CurrencyText from "@/components/common/fields/CurrencyText.vue";
+import {formatStringToIso} from "@/utils/dateUtils";
 
 const budgetStore = useBudgetStore();
 
@@ -44,7 +44,7 @@ const formatString = (string, maxChars) => {
       </Column>
       <Column field="date" header="Date" style="width: 5%" sortable>
         <template #body="{ data }">
-          {{formatDate(data.date)}}
+          {{formatStringToIso(data.date)}}
         </template>
       </Column>
       <Column></Column>
