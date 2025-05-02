@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BalanceDTO {
-    private BigDecimal balance;
+    private BigDecimal total;
     private BigDecimal expenses;
-    private BigDecimal income;
+    private BigDecimal incomes;
 }

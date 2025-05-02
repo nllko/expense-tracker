@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-        List<Transaction> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate);
+        List<Transaction> findByDateBetweenOrderByDateDescCreatedAtDesc(LocalDateTime startDate, LocalDateTime endDate);
+        List<Transaction> findAllByOrderByDateDescCreatedAtDesc();
 
         @Query("""
                         SELECT new com.niko.backend.DTOs.BalanceDTO(

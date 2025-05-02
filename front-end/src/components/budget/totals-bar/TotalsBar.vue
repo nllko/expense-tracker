@@ -1,31 +1,37 @@
 <script setup>
-import {useBudgetStore} from "@/stores/BudgetStore";
 import BalanceCard from "@/components/budget/totals-bar/cards/BalanceCard.vue";
 import ButtonsCard from "@/components/budget/totals-bar/cards/ButtonsCard.vue";
 import CalendarCard from "@/components/budget/totals-bar/cards/CalendarCard.vue";
+import {computed} from "vue";
+import {getMonthName} from "@/utils/dateUtils";
+import {useBudgetStore} from "@/stores/BudgetStore";
 
-const store = useBudgetStore();
+const budgetStore = useBudgetStore();
+
+const monthName = computed(() => {
+  return budgetStore.selectedDate ? getMonthName(budgetStore.selectedDate) : "Total";
+});
 </script>
 
 <template>
   <TransitionGroup name="fade" tag="div" class="flex flex-row h-min">
     <balance-card key="total"
                   class="card-left"
-                  title="Total"
+                  :title="monthName + ' balance'"
                   subtitle="Latest transactions :"
-                  :balance="store.getTotal"
-                  :latest="store.getLatestTransactions"/>
-    <div v-show="store.isExpanded" key="balances" class="flex">
+                  :balance="budgetStore.balances.total"
+                  :latest="budgetStore.latestTotal"/>
+    <div v-show="budgetStore.expanded" key="balances" class="flex">
       <balance-card
-          :title="store.getMonthName + ' expenses'"
+          :title="monthName + ' expenses'"
           subtitle="Latest expenses :"
-          :balance="store.getExpenses"
-          :latest="store.getLatestExpenses"/>
+          :balance="budgetStore.balances.expenses"
+          :latest="budgetStore.latestExpenses"/>
       <balance-card
-          :title="store.getMonthName + ' incomes'"
+          :title="monthName + ' incomes'"
           subtitle="Latest incomes :"
-          :balance="store.getIncome"
-          :latest="store.getLatestIncomes"/>
+          :balance="budgetStore.balances.incomes"
+          :latest="budgetStore.latestIncomes"/>
       <calendar-card key="calendar" class="max-w-48"/>
     </div>
     <buttons-card key="buttons" class="card-right"/>
