@@ -16,6 +16,12 @@ export default {
     saveTransaction(transaction) {
         return api().post(URL + "/save", transaction);
     },
+    updateTransaction(transaction) {
+      return api().put(URL + "/update", transaction);
+    },
+    deleteTransaction(id) {
+        return api().delete(URL + `/delete/${id}`);
+    },
     getBalanceByPeriod(startDate, endDate) {
         return api().get(URL + "/balance", {
             params: {

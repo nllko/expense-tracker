@@ -6,7 +6,7 @@ import {formatDateToIsoString} from "@/utils/dateUtils";
 
 const schema = yup.object({
     name: yup.string().required().label("Name"),
-    description: yup.string().optional().label("Description"),
+    description: yup.string().nullable().label("Description"),
     amount: yup.number().required().notOneOf([0],"Amount can't be 0").label("Amount"),
     type: yup.string().required().label("Type"),
     date: yup.date().required().max(new Date(),"Date can't be in the future").label("Date")
@@ -24,16 +24,36 @@ export const useTransactionStore = defineStore("transaction", () => {
     const [type] = defineField("type");
     const [date] = defineField("date");
 
+    const initForm = (transaction) => {
+        Object.keys(transaction).forEach((field) => {
+            setFieldValue(field,transaction[field]);
+        })
+    }
+
     const validateAndSave = async () => {
         const { valid } = await validate();
+
         if (valid) {
             setFieldValue("date", formatDateToIsoString(values.date))
-            return saveTransaction(values)
+            console.log(values)
+            return values.id ? updateTransaction(values) : saveTransaction(values);
         }
     }
 
     const saveTransaction = (transaction) => {
         return TransactionsService.saveTransaction(transaction).catch((error) => {
+            console.error(error);
+        })
+    }
+
+    const updateTransaction = (transaction) => {
+        return TransactionsService.updateTransaction(transaction).catch((error) => {
+            console.error(error);
+        })
+    }
+
+    const deleteTransaction = (id) => {
+        return TransactionsService.deleteTransaction(id).catch((error) => {
             console.error(error);
         })
     }
@@ -57,8 +77,11 @@ export const useTransactionStore = defineStore("transaction", () => {
         errors,
         errorBag,
         resetForm,
+        initForm,
         validateAndSave,
         saveTransaction,
+        updateTransaction,
+        deleteTransaction,
         syncTypeWithAmount,
         syncAmountWithType
     }

@@ -17,5 +17,8 @@ export const formatStringToIso = (date) => {
 }
 
 export const formatDateToIsoString = (date) => {
+    if (typeof date === "string") {
+        return date;
+    }
     return DateTime.fromJSDate(date).toISO({includeOffset: false});
 }

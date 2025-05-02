@@ -26,13 +26,23 @@ public class TransactionController {
         return transactionService.save(dto);
     }
 
+    @PutMapping("/update")
+    public Transaction updateTransaction(@RequestBody TransactionDTO dto) {
+        return transactionService.save(dto);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteTransactionById(@PathVariable Long id) {
+        transactionService.deleteTransactionById(id);
+    }
+
     @GetMapping("")
-    public List<Transaction> geTransactionsByPeriod(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+    public List<TransactionDTO> geTransactionsByPeriod(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         return transactionService.geTransactionsByPeriod(startDate, endDate);
     }
 
     @GetMapping("/all")
-    public List<Transaction> geTransactions() {
+    public List<TransactionDTO> geTransactions() {
         return transactionService.findAll();
     }
 
