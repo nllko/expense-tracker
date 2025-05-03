@@ -20,8 +20,10 @@ A full-stack learning project to maintain coding skills and explore modern techn
 - REST API endpoints
 - Responsive UI components
 - State management with Pinia
+- Basic form validation
 
-![Budget page](images/budget-page.png)
+<img alt="Budget page" src="images/budget-page.png">
+<img alt="Form validation" src="images/form-validation.png" width="300" height="300">
 
 ### Installation
 1. Clone the repository
@@ -30,10 +32,11 @@ A full-stack learning project to maintain coding skills and explore modern techn
 
 2. Backend Setup
    ```bash
-   cd backend
+   cd back-end
    mvn clean install
 - Create PostgreSQL database `your_db_name`
 - Add `db.properties` file inside `back-end/src/main/resources` with params
+
   ```properties
   spring.datasource.url=url_to_your_db
   spring.datasource.username=your_username
@@ -41,7 +44,7 @@ A full-stack learning project to maintain coding skills and explore modern techn
 
 3. Frontend Setup
     ```bash
-   cd frontend
+   cd front-end
    npm install
    
 ### Running
@@ -59,6 +62,7 @@ A full-stack learning project to maintain coding skills and explore modern techn
 - [ ] Improve error handling
 - [ ] Revisit stores and data fetching 
 - [ ] Loading states for stores
+- [ ] Back-end object validations
 - [ ] Tests :D
 
 🤝 Contributing
